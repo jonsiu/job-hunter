@@ -157,20 +157,31 @@ class CareerOSOptions {
     }
 
     try {
-      // Test connection to CareerOS
-      const response = await fetch(`${url}/api/health`, {
-        method: 'GET',
-        mode: 'cors'
+      // Show loading state
+      const button = document.getElementById('test-connection');
+      const originalText = button.textContent;
+      button.textContent = 'Testing...';
+      button.disabled = true;
+
+      // Send message to background script to test connection
+      const response = await chrome.runtime.sendMessage({
+        action: 'testConnection',
+        url: url
       });
 
-      if (response.ok) {
-        this.showSuccess('Connection successful!');
+      if (response.success) {
+        this.showSuccess(response.message || 'Connection successful!');
       } else {
-        throw new Error('Connection failed');
+        this.showError(response.error || 'Connection failed. Please check your URL and try again.');
       }
     } catch (error) {
       console.error('Connection test failed:', error);
       this.showError('Connection failed. Please check your URL and try again.');
+    } finally {
+      // Restore button state
+      const button = document.getElementById('test-connection');
+      button.textContent = 'Test Connection';
+      button.disabled = false;
     }
   }
 

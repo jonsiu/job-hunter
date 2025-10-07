@@ -88,6 +88,11 @@ class CareerOSBackground {
           sendResponse({ success: true });
           break;
 
+        case 'testConnection':
+          const connectionResult = await this.testConnection(request.url);
+          sendResponse(connectionResult);
+          break;
+
         default:
           sendResponse({ success: false, error: 'Unknown action' });
       }
@@ -315,6 +320,66 @@ class CareerOSBackground {
         title: 'CareerOS Job Collector',
         message: 'Welcome! Start bookmarking jobs to get personalized career insights.'
       });
+    }
+  }
+
+  async testConnection(url) {
+    try {
+      if (!url) {
+        return { success: false, error: 'URL is required' };
+      }
+
+      // Ensure URL has protocol
+      if (!url.startsWith('http://') && !url.startsWith('https://')) {
+        url = 'http://' + url;
+      }
+
+      console.log('Testing connection to:', url);
+      
+      // Test connection to CareerOS health endpoint
+      const response = await fetch(`${url}/api/health`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Add timeout
+        signal: AbortSignal.timeout(10000) // 10 second timeout
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Connection successful:', data);
+        return { 
+          success: true, 
+          message: 'Connection successful!',
+          data: data
+        };
+      } else {
+        return { 
+          success: false, 
+          error: `HTTP ${response.status}: ${response.statusText}` 
+        };
+      }
+    } catch (error) {
+      console.error('Connection test failed:', error);
+      
+      // Provide more specific error messages
+      if (error.name === 'AbortError') {
+        return { 
+          success: false, 
+          error: 'Connection timeout. Please check if the server is running.' 
+        };
+      } else if (error.message.includes('Failed to fetch')) {
+        return { 
+          success: false, 
+          error: 'Cannot connect to server. Please check the URL and ensure the server is running.' 
+        };
+      } else {
+        return { 
+          success: false, 
+          error: `Connection failed: ${error.message}` 
+        };
+      }
     }
   }
 
