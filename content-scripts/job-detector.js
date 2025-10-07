@@ -1,6 +1,12 @@
 // CareerOS Job Collector - Job Detection Content Script
 // Detects job postings and adds bookmark functionality
 
+// Prevent multiple initializations
+if (window.careerOSJobDetector) {
+  console.log('CareerOS Job Detector already initialized');
+} else {
+  window.careerOSJobDetector = true;
+
 class JobDetector {
   constructor() {
     this.jobData = null;
@@ -489,3 +495,5 @@ class JobDetector {
 
 // Initialize the job detector
 new JobDetector();
+
+} // End of initialization check
