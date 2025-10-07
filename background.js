@@ -89,8 +89,15 @@ class CareerOSBackground {
           break;
 
         case 'testConnection':
-          const connectionResult = await this.testConnection(request.url);
-          sendResponse(connectionResult);
+          console.log('Background: Received testConnection request for URL:', request.url);
+          try {
+            const connectionResult = await this.testConnection(request.url);
+            console.log('Background: Connection test result:', connectionResult);
+            sendResponse(connectionResult);
+          } catch (error) {
+            console.error('Background: Error in testConnection:', error);
+            sendResponse({ success: false, error: error.message });
+          }
           break;
 
         default:
@@ -336,15 +343,21 @@ class CareerOSBackground {
 
       console.log('Testing connection to:', url);
       
+      // Create a timeout promise
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Connection timeout')), 10000);
+      });
+
       // Test connection to CareerOS health endpoint
-      const response = await fetch(`${url}/api/health`, {
+      const fetchPromise = fetch(`${url}/api/health`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-        },
-        // Add timeout
-        signal: AbortSignal.timeout(10000) // 10 second timeout
+        }
       });
+
+      // Race between fetch and timeout
+      const response = await Promise.race([fetchPromise, timeoutPromise]);
 
       if (response.ok) {
         const data = await response.json();
@@ -364,7 +377,7 @@ class CareerOSBackground {
       console.error('Connection test failed:', error);
       
       // Provide more specific error messages
-      if (error.name === 'AbortError') {
+      if (error.message === 'Connection timeout') {
         return { 
           success: false, 
           error: 'Connection timeout. Please check if the server is running.' 
@@ -373,6 +386,11 @@ class CareerOSBackground {
         return { 
           success: false, 
           error: 'Cannot connect to server. Please check the URL and ensure the server is running.' 
+        };
+      } else if (error.message.includes('CORS')) {
+        return { 
+          success: false, 
+          error: 'CORS error. The server may not be configured to allow extension requests.' 
         };
       } else {
         return { 

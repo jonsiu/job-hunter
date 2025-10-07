@@ -164,15 +164,20 @@ class CareerOSOptions {
       button.disabled = true;
 
       // Send message to background script to test connection
+      console.log('Sending test connection message for URL:', url);
       const response = await chrome.runtime.sendMessage({
         action: 'testConnection',
         url: url
       });
 
-      if (response.success) {
+      console.log('Received response:', response);
+
+      if (response && response.success) {
         this.showSuccess(response.message || 'Connection successful!');
       } else {
-        this.showError(response.error || 'Connection failed. Please check your URL and try again.');
+        const errorMessage = response?.error || 'Connection failed. Please check your URL and try again.';
+        console.error('Connection test failed:', errorMessage);
+        this.showError(errorMessage);
       }
     } catch (error) {
       console.error('Connection test failed:', error);
