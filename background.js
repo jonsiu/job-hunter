@@ -88,6 +88,11 @@ class CareerOSBackground {
           sendResponse({ success: true });
           break;
 
+        case 'ping':
+          console.log('Background: Received ping request');
+          sendResponse({ success: true, message: 'Background script is alive' });
+          break;
+
         case 'testConnection':
           console.log('Background: Received testConnection request for URL:', request.url);
           try {
@@ -101,7 +106,8 @@ class CareerOSBackground {
           break;
 
         default:
-          sendResponse({ success: false, error: 'Unknown action' });
+          console.log('Background: Unknown action:', request.action);
+          sendResponse({ success: false, error: 'Unknown action: ' + request.action });
       }
     } catch (error) {
       console.error('Error handling message:', error);

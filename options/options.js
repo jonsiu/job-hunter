@@ -203,12 +203,30 @@ class CareerOSOptions {
       button.textContent = 'Testing...';
       button.disabled = true;
 
+      // Check if chrome.runtime is available
+      if (!chrome.runtime) {
+        throw new Error('Chrome runtime not available');
+      }
+
+      // First, test if background script is responding
+      console.log('Testing background script availability...');
+      const testResponse = await chrome.runtime.sendMessage({ action: 'ping' });
+      console.log('Background script ping response:', testResponse);
+      
       // Send message to background script to test connection
       console.log('Sending test connection message for URL:', url);
-      const response = await chrome.runtime.sendMessage({
+      
+      // Create a timeout promise
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Message timeout - background script may not be responding')), 15000);
+      });
+      
+      const messagePromise = chrome.runtime.sendMessage({
         action: 'testConnection',
         url: url
       });
+      
+      const response = await Promise.race([messagePromise, timeoutPromise]);
 
       console.log('Received response:', response);
 
@@ -221,7 +239,12 @@ class CareerOSOptions {
       }
     } catch (error) {
       console.error('Connection test failed:', error);
-      this.showError('Connection failed. Please check your URL and try again.');
+      console.error('Error details:', {
+        name: error.name,
+        message: error.message,
+        stack: error.stack
+      });
+      this.showError('Connection failed: ' + error.message);
     } finally {
       // Restore button state
       const button = document.getElementById('test-connection');
