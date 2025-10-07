@@ -489,6 +489,24 @@ body {
     border-bottom-color: #374151;
   }
   
+  .header-text h1 {
+    color: #f9fafb;
+  }
+  
+  .job-count {
+    color: #d1d5db;
+  }
+  
+  .sync-btn {
+    background: #374151;
+    color: #d1d5db;
+  }
+  
+  .sync-btn:hover {
+    background: #4b5563;
+    color: #f9fafb;
+  }
+  
   .tab-navigation {
     background: #1f2937;
     border-bottom-color: #374151;
@@ -508,6 +526,37 @@ body {
     background: #1e3a8a;
   }
   
+  .popup-content {
+    background: #111827;
+  }
+  
+  .jobs-header h2 {
+    color: #f9fafb;
+  }
+  
+  .action-btn {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .action-btn:hover {
+    background: #4b5563;
+    color: #f9fafb;
+    border-color: #6b7280;
+  }
+  
+  .action-btn.primary {
+    background: #3B82F6;
+    color: #ffffff;
+    border-color: #3B82F6;
+  }
+  
+  .action-btn.primary:hover {
+    background: #2563EB;
+    border-color: #2563EB;
+  }
+  
   .job-item {
     border-bottom-color: #374151;
   }
@@ -516,8 +565,79 @@ body {
     background: #1f2937;
   }
   
+  .job-title {
+    color: #f9fafb;
+  }
+  
+  .job-company {
+    color: #d1d5db;
+  }
+  
+  .job-location {
+    color: #9ca3af;
+  }
+  
+  .job-action-btn {
+    color: #9ca3af;
+  }
+  
+  .job-action-btn:hover {
+    background: #374151;
+    color: #d1d5db;
+  }
+  
+  .job-meta {
+    color: #9ca3af;
+  }
+  
+  .job-source {
+    background: #374151;
+    color: #d1d5db;
+  }
+  
+  .job-date {
+    color: #9ca3af;
+  }
+  
+  .analysis-header h2 {
+    color: #f9fafb;
+  }
+  
+  .analysis-subtitle {
+    color: #d1d5db;
+  }
+  
+  .insights-header h2 {
+    color: #f9fafb;
+  }
+  
+  .insights-subtitle {
+    color: #d1d5db;
+  }
+  
+  .empty-state h3 {
+    color: #f9fafb;
+  }
+  
+  .empty-state p {
+    color: #d1d5db;
+  }
+  
+  .loading-state {
+    color: #d1d5db;
+  }
+  
   .popup-footer {
     background: #1f2937;
     border-top-color: #374151;
+  }
+  
+  .footer-btn {
+    color: #9ca3af;
+  }
+  
+  .footer-btn:hover {
+    background: #374151;
+    color: #d1d5db;
   }
 }

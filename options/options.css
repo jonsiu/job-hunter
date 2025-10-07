@@ -367,6 +367,14 @@ body {
     border-bottom-color: #374151;
   }
   
+  .header-text h1 {
+    color: #f9fafb;
+  }
+  
+  .header-text p {
+    color: #d1d5db;
+  }
+  
   .settings-section h2 {
     color: #f9fafb;
     border-bottom-color: #374151;
@@ -374,6 +382,10 @@ body {
   
   .setting-text strong {
     color: #f9fafb;
+  }
+  
+  .setting-text small {
+    color: #d1d5db;
   }
   
   .setting-input {
@@ -395,6 +407,73 @@ body {
   .job-board-item:hover {
     background: #4b5563;
     border-color: #6b7280;
+  }
+  
+  .job-board-name {
+    color: #f9fafb;
+  }
+  
+  .stat-label {
+    color: #d1d5db;
+  }
+  
+  .stat-value {
+    color: #f9fafb;
+  }
+  
+  .about-label {
+    color: #d1d5db;
+  }
+  
+  .about-value {
+    color: #f9fafb;
+  }
+  
+  .action-btn {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .action-btn:hover {
+    background: #4b5563;
+    color: #f9fafb;
+    border-color: #6b7280;
+  }
+  
+  .action-btn.primary {
+    background: #3B82F6;
+    color: #ffffff;
+    border-color: #3B82F6;
+  }
+  
+  .action-btn.primary:hover {
+    background: #2563EB;
+    border-color: #2563EB;
+  }
+  
+  .action-btn.secondary {
+    background: #374151;
+    color: #d1d5db;
+    border-color: #4b5563;
+  }
+  
+  .action-btn.secondary:hover {
+    background: #4b5563;
+    color: #f9fafb;
+    border-color: #6b7280;
+  }
+  
+  .action-btn.danger {
+    background: #1f2937;
+    color: #fca5a5;
+    border-color: #dc2626;
+  }
+  
+  .action-btn.danger:hover {
+    background: #374151;
+    color: #f87171;
+    border-color: #b91c1c;
   }
   
   .options-footer {
