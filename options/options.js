@@ -99,10 +99,10 @@ class CareerOSOptions {
         linkedin: true,
         indeed: true,
         glassdoor: true,
-        angelList: true,
-        stackOverflow: true,
-        remoteCo: true,
-        weWorkRemotely: true
+        'angel-list': true,
+        'stack-overflow': true,
+        'remote-co': true,
+        'we-work-remotely': true
       }
     };
   }
@@ -155,10 +155,10 @@ class CareerOSOptions {
         linkedin: document.getElementById('linkedin').checked,
         indeed: document.getElementById('indeed').checked,
         glassdoor: document.getElementById('glassdoor').checked,
-        angelList: document.getElementById('angel-list').checked,
-        stackOverflow: document.getElementById('stack-overflow').checked,
-        remoteCo: document.getElementById('remote-co').checked,
-        weWorkRemotely: document.getElementById('we-work-remotely').checked
+        'angel-list': document.getElementById('angel-list').checked,
+        'stack-overflow': document.getElementById('stack-overflow').checked,
+        'remote-co': document.getElementById('remote-co').checked,
+        'we-work-remotely': document.getElementById('we-work-remotely').checked
       };
 
       // Save to storage
