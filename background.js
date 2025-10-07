@@ -41,11 +41,11 @@ class CareerOSBackground {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       this.handleMessage(request, sender, sendResponse);
       return true; // Keep message channel open for async responses
-    });
+    }.bind(this));
 
     // Tab updates for job detection
     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-      if (changeInfo.status === 'complete' && this.isJobBoard(tab.url)) {
+      if (changeInfo.status === 'complete' && tab.url && this.isJobBoard(tab.url)) {
         this.injectJobDetector(tabId);
       }
     });
@@ -301,6 +301,13 @@ class CareerOSBackground {
   }
 
   isJobBoard(url) {
+    console.log('isJobBoard called with URL:', url, 'Type:', typeof url);
+    
+    if (!url || typeof url !== 'string') {
+      console.log('isJobBoard: URL is invalid, returning false');
+      return false;
+    }
+    
     const jobBoards = [
       'linkedin.com/jobs',
       'indeed.com',
@@ -311,7 +318,9 @@ class CareerOSBackground {
       'weworkremotely.com'
     ];
     
-    return jobBoards.some(board => url.includes(board));
+    const result = jobBoards.some(board => url.includes(board));
+    console.log('isJobBoard result:', result);
+    return result;
   }
 
   async injectJobDetector(tabId) {
