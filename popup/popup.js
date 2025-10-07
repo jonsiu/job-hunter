@@ -3,9 +3,15 @@
 
 class CareerOSPopup {
   constructor() {
-    this.currentTab = 'jobs';
-    this.jobs = [];
-    this.initialize();
+    try {
+      console.log('Popup: Constructor called');
+      this.currentTab = 'jobs';
+      this.jobs = [];
+      this.initialize();
+    } catch (error) {
+      console.error('Popup: Error in constructor:', error);
+      throw error;
+    }
   }
 
   initialize() {
@@ -73,6 +79,7 @@ class CareerOSPopup {
   }
 
   async loadJobs() {
+    console.log('Popup: Loading jobs...');
     const jobsList = document.getElementById('jobs-list');
     const loadingState = document.getElementById('jobs-loading');
     
@@ -82,14 +89,16 @@ class CareerOSPopup {
 
     try {
       // Get jobs from background script
+      console.log('Popup: Sending getBookmarkedJobs message...');
       const response = await this.sendMessage({ action: 'getBookmarkedJobs' });
+      console.log('Popup: Received response:', response);
       
-      if (response.success) {
+      if (response && response.success) {
         this.jobs = response.jobs;
         this.renderJobs();
         this.updateJobCount();
       } else {
-        throw new Error(response.error || 'Failed to load jobs');
+        throw new Error(response?.error || 'Failed to load jobs');
       }
     } catch (error) {
       console.error('Error loading jobs:', error);
@@ -383,8 +392,12 @@ class CareerOSPopup {
   }
 
   sendMessage(message) {
+    console.log('Popup: Sending message:', message);
     return new Promise((resolve) => {
-      chrome.runtime.sendMessage(message, resolve);
+      chrome.runtime.sendMessage(message, (response) => {
+        console.log('Popup: Message response:', response);
+        resolve(response);
+      });
     });
   }
 
@@ -409,5 +422,19 @@ class CareerOSPopup {
 
 // Initialize the popup when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-  new CareerOSPopup();
+  try {
+    console.log('Popup: DOM loaded, initializing...');
+    new CareerOSPopup();
+  } catch (error) {
+    console.error('Popup: Error during initialization:', error);
+    // Show error message to user
+    document.body.innerHTML = `
+      <div style="padding: 20px; text-align: center;">
+        <h2>Extension Error</h2>
+        <p>There was an error loading the extension popup.</p>
+        <p>Please try refreshing the extension.</p>
+        <p>Error: ${error.message}</p>
+      </div>
+    `;
+  }
 });
