@@ -90,7 +90,15 @@ class CareerOSPopup {
     try {
       // Get jobs from background script
       console.log('Popup: Sending getBookmarkedJobs message...');
-      const response = await this.sendMessage({ action: 'getBookmarkedJobs' });
+      
+      // Add timeout to prevent infinite loading
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), 5000);
+      });
+      
+      const messagePromise = this.sendMessage({ action: 'getBookmarkedJobs' });
+      const response = await Promise.race([messagePromise, timeoutPromise]);
+      
       console.log('Popup: Received response:', response);
       
       if (response && response.success) {
@@ -108,6 +116,8 @@ class CareerOSPopup {
 
   renderJobs() {
     const jobsList = document.getElementById('jobs-list');
+    
+    console.log('Popup: Rendering jobs, count:', this.jobs.length);
     
     if (this.jobs.length === 0) {
       jobsList.innerHTML = `
