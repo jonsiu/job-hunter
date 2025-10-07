@@ -10,6 +10,21 @@ class CareerOSOptions {
   initialize() {
     console.log('CareerOS Options initialized');
     
+    // Check if required elements exist
+    const requiredElements = [
+      'save-settings', 'reset-settings', 'test-connection',
+      'export-data', 'import-data', 'clear-data',
+      'auto-analyze', 'notifications', 'sync-career-os',
+      'career-os-url'
+    ];
+    
+    const missingElements = requiredElements.filter(id => !document.getElementById(id));
+    if (missingElements.length > 0) {
+      console.error('Missing required elements:', missingElements);
+      this.showError('Missing required form elements. Please refresh the page.');
+      return;
+    }
+    
     this.loadSettings();
     this.setupEventListeners();
     this.updateDataStats();
@@ -54,17 +69,23 @@ class CareerOSOptions {
 
   async loadSettings() {
     try {
+      console.log('Loading settings...');
       const result = await chrome.storage.local.get(['settings']);
+      console.log('Storage result:', result);
+      
       this.settings = result.settings || this.getDefaultSettings();
+      console.log('Using settings:', this.settings);
       
       // Populate form fields
       this.populateForm();
       
       // Update last updated time
       this.updateLastUpdated();
+      
+      console.log('Settings loaded successfully');
     } catch (error) {
       console.error('Error loading settings:', error);
-      this.showError('Failed to load settings');
+      this.showError('Failed to load settings: ' + error.message);
     }
   }
 
@@ -87,19 +108,38 @@ class CareerOSOptions {
   }
 
   populateForm() {
-    // General settings
-    document.getElementById('auto-analyze').checked = this.settings.autoAnalyze;
-    document.getElementById('notifications').checked = this.settings.notifications;
-    document.getElementById('sync-career-os').checked = this.settings.syncWithCareerOS;
-    document.getElementById('career-os-url').value = this.settings.careerOSUrl;
+    try {
+      console.log('Populating form with settings:', this.settings);
+      
+      // General settings
+      const autoAnalyze = document.getElementById('auto-analyze');
+      const notifications = document.getElementById('notifications');
+      const syncCareerOS = document.getElementById('sync-career-os');
+      const careerOSUrl = document.getElementById('career-os-url');
+      
+      if (autoAnalyze) autoAnalyze.checked = this.settings.autoAnalyze;
+      if (notifications) notifications.checked = this.settings.notifications;
+      if (syncCareerOS) syncCareerOS.checked = this.settings.syncWithCareerOS;
+      if (careerOSUrl) careerOSUrl.value = this.settings.careerOSUrl;
 
-    // Job board settings
-    Object.keys(this.settings.enabledJobBoards).forEach(board => {
-      const checkbox = document.getElementById(board);
-      if (checkbox) {
-        checkbox.checked = this.settings.enabledJobBoards[board];
+      // Job board settings
+      if (this.settings.enabledJobBoards) {
+        Object.keys(this.settings.enabledJobBoards).forEach(board => {
+          const checkbox = document.getElementById(board);
+          if (checkbox) {
+            checkbox.checked = this.settings.enabledJobBoards[board];
+            console.log(`Set ${board} to ${this.settings.enabledJobBoards[board]}`);
+          } else {
+            console.warn(`Checkbox not found for board: ${board}`);
+          }
+        });
       }
-    });
+      
+      console.log('Form populated successfully');
+    } catch (error) {
+      console.error('Error populating form:', error);
+      this.showError('Failed to populate form: ' + error.message);
+    }
   }
 
   async saveSettings() {
