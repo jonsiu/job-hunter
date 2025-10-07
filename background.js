@@ -41,7 +41,7 @@ class CareerOSBackground {
     chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       this.handleMessage(request, sender, sendResponse);
       return true; // Keep message channel open for async responses
-    }.bind(this));
+    });
 
     // Tab updates for job detection
     chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
@@ -61,6 +61,7 @@ class CareerOSBackground {
   }
 
   async handleMessage(request, sender, sendResponse) {
+    console.log('Background: Received message:', request.action);
     try {
       switch (request.action) {
         case 'bookmarkJob':
@@ -69,7 +70,9 @@ class CareerOSBackground {
           break;
 
         case 'getBookmarkedJobs':
+          console.log('Background: Getting bookmarked jobs...');
           const jobs = await this.getBookmarkedJobs();
+          console.log('Background: Found jobs:', jobs.length);
           sendResponse({ success: true, jobs });
           break;
 
