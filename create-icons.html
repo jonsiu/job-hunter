@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Extension Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .icon-container {
+            display: inline-block;
+            margin: 10px;
+            text-align: center;
+        }
+        .icon {
+            border: 1px solid #ddd;
+            background: #3B82F6;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .icon-16 { width: 16px; height: 16px; font-size: 8px; }
+        .icon-32 { width: 32px; height: 32px; font-size: 14px; }
+        .icon-48 { width: 48px; height: 48px; font-size: 20px; }
+        .icon-128 { width: 128px; height: 128px; font-size: 48px; }
+        canvas {
+            border: 1px solid #ddd;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>CareerOS Extension Icons</h1>
+    <p>This page generates basic extension icons. Right-click and save each icon.</p>
+    
+    <div class="icon-container">
+        <div class="icon icon-16">CO</div>
+        <div>16x16</div>
+    </div>
+    
+    <div class="icon-container">
+        <div class="icon icon-32">CO</div>
+        <div>32x32</div>
+    </div>
+    
+    <div class="icon-container">
+        <div class="icon icon-48">CO</div>
+        <div>48x48</div>
+    </div>
+    
+    <div class="icon-container">
+        <div class="icon icon-128">CO</div>
+        <div>128x128</div>
+    </div>
+
+    <h2>Generated Icons (Right-click to save)</h2>
+    <div id="canvas-container"></div>
+
+    <script>
+        function createIcon(size, filename) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Background
+            ctx.fillStyle = '#3B82F6';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Add a subtle gradient
+            const gradient = ctx.createLinearGradient(0, 0, size, size);
+            gradient.addColorStop(0, '#3B82F6');
+            gradient.addColorStop(1, '#2563EB');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, size, size);
+            
+            // Add a bookmark icon
+            ctx.fillStyle = 'white';
+            ctx.font = `${size * 0.4}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('📋', size/2, size/2);
+            
+            // Add filename
+            canvas.title = filename;
+            
+            return canvas;
+        }
+        
+        const sizes = [
+            { size: 16, name: 'icon-16.png' },
+            { size: 32, name: 'icon-32.png' },
+            { size: 48, name: 'icon-48.png' },
+            { size: 128, name: 'icon-128.png' }
+        ];
+        
+        const container = document.getElementById('canvas-container');
+        
+        sizes.forEach(({ size, name }) => {
+            const canvas = createIcon(size, name);
+            const div = document.createElement('div');
+            div.style.display = 'inline-block';
+            div.style.margin = '10px';
+            div.style.textAlign = 'center';
+            
+            div.appendChild(canvas);
+            
+            const label = document.createElement('div');
+            label.textContent = name;
+            label.style.fontSize = '12px';
+            label.style.marginTop = '5px';
+            
+            div.appendChild(label);
+            container.appendChild(div);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CareerOS Job Collector - Settings</title>
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="options-container">
+    <!-- Header -->
+    <header class="options-header">
+      <div class="header-content">
+        <img src="../assets/icons/icon-48.png" alt="CareerOS" class="header-icon">
+        <div class="header-text">
+          <h1>CareerOS Job Collector</h1>
+          <p>Settings & Preferences</p>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="options-content">
+      <!-- General Settings -->
+      <section class="settings-section">
+        <h2>General Settings</h2>
+        
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="auto-analyze" class="setting-checkbox">
+            <span class="setting-text">
+              <strong>Auto-analyze jobs</strong>
+              <small>Automatically analyze jobs when bookmarked</small>
+            </span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="notifications" class="setting-checkbox">
+            <span class="setting-text">
+              <strong>Enable notifications</strong>
+              <small>Receive notifications for job analysis and insights</small>
+            </span>
+          </label>
+        </div>
+
+        <div class="setting-item">
+          <label class="setting-label">
+            <input type="checkbox" id="sync-career-os" class="setting-checkbox">
+            <span class="setting-text">
+              <strong>Sync with CareerOS</strong>
+              <small>Automatically sync bookmarked jobs with your CareerOS account</small>
+            </span>
+          </label>
+        </div>
+      </section>
+
+      <!-- CareerOS Integration -->
+      <section class="settings-section">
+        <h2>CareerOS Integration</h2>
+        
+        <div class="setting-item">
+          <label for="career-os-url" class="setting-label">
+            <strong>CareerOS URL</strong>
+            <small>Your CareerOS instance URL</small>
+          </label>
+          <input type="url" id="career-os-url" class="setting-input" placeholder="https://career-os.vercel.app">
+        </div>
+
+        <div class="setting-item">
+          <button id="test-connection" class="action-btn secondary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+              <path d="M21 3v5h-5"/>
+              <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+              <path d="M3 21v-5h5"/>
+            </svg>
+            Test Connection
+          </button>
+        </div>
+      </section>
+
+      <!-- Job Board Preferences -->
+      <section class="settings-section">
+        <h2>Job Board Preferences</h2>
+        
+        <div class="setting-item">
+          <label class="setting-label">
+            <strong>Supported Job Boards</strong>
+            <small>Select which job boards to monitor</small>
+          </label>
+          <div class="job-board-list">
+            <label class="job-board-item">
+              <input type="checkbox" id="linkedin" class="job-board-checkbox" checked>
+              <span class="job-board-name">LinkedIn Jobs</span>
+            </label>
+            <label class="job-board-item">
+              <input type="checkbox" id="indeed" class="job-board-checkbox" checked>
+              <span class="job-board-name">Indeed</span>
+            </label>
+            <label class="job-board-item">
+              <input type="checkbox" id="glassdoor" class="job-board-checkbox" checked>
+              <span class="job-board-name">Glassdoor</span>
+            </label>
+            <label class="job-board-item">
+              <input type="checkbox" id="angel-list" class="job-board-checkbox" checked>
+              <span class="job-board-name">AngelList</span>
+            </label>
+            <label class="job-board-item">
+              <input type="checkbox" id="stack-overflow" class="job-board-checkbox" checked>
+              <span class="job-board-name">Stack Overflow Jobs</span>
+            </label>
+            <label class="job-board-item">
+              <input type="checkbox" id="remote-co" class="job-board-checkbox" checked>
+              <span class="job-board-name">Remote.co</span>
+            </label>
+            <label class="job-board-item">
+              <input type="checkbox" id="we-work-remotely" class="job-board-checkbox" checked>
+              <span class="job-board-name">We Work Remotely</span>
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- Data Management -->
+      <section class="settings-section">
+        <h2>Data Management</h2>
+        
+        <div class="setting-item">
+          <div class="data-stats">
+            <div class="stat-item">
+              <span class="stat-label">Bookmarked Jobs:</span>
+              <span class="stat-value" id="job-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Analyzed Jobs:</span>
+              <span class="stat-value" id="analyzed-count">0</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">Storage Used:</span>
+              <span class="stat-value" id="storage-used">0 KB</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="data-actions">
+            <button id="export-data" class="action-btn secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7,10 12,15 17,10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Export Data
+            </button>
+            <button id="import-data" class="action-btn secondary">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="3,9 12,2 21,9"/>
+                <line x1="12" y1="2" x2="12" y2="15"/>
+              </svg>
+              Import Data
+            </button>
+            <button id="clear-data" class="action-btn danger">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"/>
+                <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/>
+                <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>
+              </svg>
+              Clear All Data
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- About -->
+      <section class="settings-section">
+        <h2>About</h2>
+        
+        <div class="about-content">
+          <div class="about-item">
+            <span class="about-label">Version:</span>
+            <span class="about-value">1.0.0</span>
+          </div>
+          <div class="about-item">
+            <span class="about-label">Last Updated:</span>
+            <span class="about-value" id="last-updated">Loading...</span>
+          </div>
+          <div class="about-item">
+            <span class="about-label">CareerOS Website:</span>
+            <a href="https://career-os.vercel.app" target="_blank" class="about-link">career-os.vercel.app</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="options-footer">
+      <div class="footer-actions">
+        <button id="save-settings" class="action-btn primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+            <polyline points="17,21 17,13 7,13 7,21"/>
+            <polyline points="7,3 7,8 15,8"/>
+          </svg>
+          Save Settings
+        </button>
+        <button id="reset-settings" class="action-btn secondary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          Reset to Defaults
+        </button>
+      </div>
+    </footer>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

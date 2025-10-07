@@ -1,0 +1,63 @@
+{
+  "manifest_version": 3,
+  "name": "CareerOS Job Collector",
+  "version": "1.0.0",
+  "description": "Collect and analyze jobs you're interested in with personalized career insights and resume optimization.",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*",
+    "https://www.indeed.com/*",
+    "https://www.glassdoor.com/*",
+    "https://angel.co/*",
+    "https://stackoverflow.com/jobs/*",
+    "https://remote.co/*",
+    "https://weworkremotely.com/*",
+    "https://career-os.vercel.app/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.linkedin.com/jobs/*",
+        "https://www.indeed.com/*",
+        "https://www.glassdoor.com/*",
+        "https://angel.co/*",
+        "https://stackoverflow.com/jobs/*",
+        "https://remote.co/*",
+        "https://weworkremotely.com/*"
+      ],
+      "js": ["content-scripts/job-detector.js"],
+      "css": ["content-scripts/job-detector.css"]
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "CareerOS Job Collector",
+    "default_icon": {
+      "16": "assets/icons/icon-16.png",
+      "32": "assets/icons/icon-32.png",
+      "48": "assets/icons/icon-48.png",
+      "128": "assets/icons/icon-128.png"
+    }
+  },
+  "options_page": "options/options.html",
+  "icons": {
+    "16": "assets/icons/icon-16.png",
+    "32": "assets/icons/icon-32.png",
+    "48": "assets/icons/icon-48.png",
+    "128": "assets/icons/icon-128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": ["assets/*"],
+      "matches": ["<all_urls>"]
+    }
+  ]
+}

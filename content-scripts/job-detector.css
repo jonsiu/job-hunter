@@ -1,0 +1,124 @@
+/* CareerOS Job Collector - Job Detector Styles */
+
+#career-os-bookmark-button {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 10000;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.career-os-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #3B82F6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.career-os-btn:hover {
+  background: #2563EB;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.career-os-btn:active {
+  transform: translateY(0);
+}
+
+.career-os-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.career-os-btn svg {
+  flex-shrink: 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  #career-os-bookmark-button {
+    top: 10px;
+    right: 10px;
+    padding: 6px;
+  }
+  
+  .career-os-btn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  #career-os-bookmark-button {
+    background: #1f2937;
+    border-color: #374151;
+  }
+  
+  .career-os-btn {
+    background: #3B82F6;
+    color: white;
+  }
+  
+  .career-os-btn:hover {
+    background: #2563EB;
+  }
+}
+
+/* Animation for bookmark success */
+@keyframes bookmarkSuccess {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.career-os-btn.success {
+  animation: bookmarkSuccess 0.3s ease;
+}
+
+/* Ensure button is visible on different job boards */
+.linkedin-jobs .career-os-btn,
+.indeed-jobs .career-os-btn,
+.glassdoor-jobs .career-os-btn {
+  position: relative;
+  z-index: 10001;
+}
+
+/* Override any conflicting styles */
+#career-os-bookmark-button * {
+  box-sizing: border-box;
+}
+
+#career-os-bookmark-button button {
+  margin: 0;
+  padding: 10px 16px;
+  border: none;
+  outline: none;
+  text-decoration: none;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+  background: inherit;
+  cursor: pointer;
+}

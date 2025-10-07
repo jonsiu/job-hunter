@@ -1,0 +1,48 @@
+{
+  "name": "career-os-job-collector",
+  "version": "1.0.0",
+  "description": "A browser extension for collecting and analyzing jobs with personalized career insights",
+  "main": "dist/background.js",
+  "scripts": {
+    "build": "node scripts/build.js",
+    "build:dev": "node scripts/build.js development",
+    "build:staging": "node scripts/build.js staging",
+    "build:prod": "node scripts/build.js production",
+    "build:watch": "tsc --watch",
+    "dev": "npm run build:dev && npm run build:watch",
+    "clean": "rm -rf dist",
+    "prebuild": "npm run clean",
+    "test": "echo 'No tests specified'",
+    "lint": "eslint src --ext .ts",
+    "package": "npm run build:prod && zip -r career-os-extension.zip dist -x '*.git*' 'node_modules/*' '*.zip' 'src' 'tsconfig.json' 'package*.json' 'scripts'"
+  },
+  "keywords": [
+    "browser-extension",
+    "job-hunting",
+    "career",
+    "resume",
+    "job-analysis",
+    "career-insights"
+  ],
+  "author": "CareerOS Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/career-os/browser-extension.git"
+  },
+  "bugs": {
+    "url": "https://github.com/career-os/browser-extension/issues"
+  },
+  "homepage": "http://localhost:3000",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.254",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
