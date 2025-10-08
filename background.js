@@ -82,8 +82,15 @@ class CareerOSBackground {
           break;
 
         case 'syncWithCareerOS':
-          await this.syncWithCareerOS();
-          sendResponse({ success: true });
+          console.log('Background: Starting sync with CareerOS...');
+          try {
+            const result = await this.syncWithCareerOS();
+            console.log('Background: Sync completed successfully:', result);
+            sendResponse({ success: true, result });
+          } catch (error) {
+            console.error('Background: Sync failed:', error);
+            sendResponse({ success: false, error: error.message });
+          }
           break;
 
         case 'updateBadge':
@@ -233,22 +240,46 @@ class CareerOSBackground {
       const jobs = await this.getBookmarkedJobs();
       
       if (!settings?.careerOSUrl) {
-        throw new Error('CareerOS URL not configured');
+        throw new Error('CareerOS URL not configured. Please check your settings.');
       }
       
-      console.log('Syncing with CareerOS:', settings.careerOSUrl);
+      if (jobs.length === 0) {
+        console.log('No jobs to sync');
+        return { success: true, message: 'No jobs to sync', synced: 0 };
+      }
       
-      // Make API call to CareerOS
+      // Get authentication token from storage
+      const authData = await this.getAuthData();
+      if (!authData || !authData.token) {
+        throw new Error('Please log in to CareerOS first. Click the authentication button to sign in.');
+      }
+      
+      console.log('Syncing with CareerOS:', settings.careerOSUrl, 'Jobs:', jobs.length);
+      
+      // Make API call to CareerOS with authentication token
       const response = await fetch(`${settings.careerOSUrl}/api/jobs/sync`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${authData.token}`
         },
         body: JSON.stringify({ jobs })
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        const errorText = await response.text();
+        console.error('Sync failed:', response.status, errorText);
+        
+        if (response.status === 401) {
+          throw new Error('Authentication required. Please log in to CareerOS first.');
+        } else if (response.status === 404) {
+          throw new Error('CareerOS sync endpoint not found. Please check if the server is running.');
+        } else if (response.status >= 500) {
+          throw new Error('CareerOS server error. Please try again later.');
+        } else {
+          throw new Error(`Sync failed: ${response.status} ${response.statusText}`);
+        }
       }
 
       const result = await response.json();
@@ -257,7 +288,15 @@ class CareerOSBackground {
       return result;
     } catch (error) {
       console.error('Error syncing with CareerOS:', error);
-      throw error;
+      
+      // Provide more specific error messages
+      if (error.message.includes('Failed to fetch')) {
+        throw new Error('Cannot connect to CareerOS. Please check if the server is running and the URL is correct.');
+      } else if (error.message.includes('CORS')) {
+        throw new Error('CORS error. Please check CareerOS server configuration.');
+      } else {
+        throw error;
+      }
     }
   }
 
@@ -296,6 +335,41 @@ class CareerOSBackground {
   async getSettings() {
     const result = await chrome.storage.local.get(['settings']);
     return result.settings || {};
+  }
+
+  async getAuthData() {
+    const result = await chrome.storage.local.get(['clerkAuth']);
+    return result.clerkAuth || null;
+  }
+
+  async checkCareerOSAuthentication(careerOSUrl) {
+    try {
+      console.log('Checking CareerOS authentication...');
+      
+      // Try to access a protected endpoint to check authentication
+      // Use the jobs endpoint as it requires authentication
+      const response = await fetch(`${careerOSUrl}/api/jobs/sync`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        console.log('CareerOS authentication check: OK');
+        return { authenticated: true };
+      } else if (response.status === 401) {
+        console.log('CareerOS authentication check: Not authenticated');
+        return { authenticated: false, reason: 'Not logged in' };
+      } else {
+        console.log('CareerOS authentication check: Server error');
+        return { authenticated: false, reason: 'Server error' };
+      }
+    } catch (error) {
+      console.error('CareerOS authentication check failed:', error);
+      return { authenticated: false, reason: 'Connection failed' };
+    }
   }
 
   updateBadge(count) {

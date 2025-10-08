@@ -7,6 +7,8 @@ class CareerOSPopup {
       console.log('Popup: Constructor called');
       this.currentTab = 'jobs';
       this.jobs = [];
+      this.authService = null;
+      this.authCheckInterval = null;
       this.initialize();
     } catch (error) {
       console.error('Popup: Error in constructor:', error);
@@ -14,12 +16,46 @@ class CareerOSPopup {
     }
   }
 
-  initialize() {
+  async initialize() {
     console.log('CareerOS Popup initialized');
     
+    // Initialize authentication service
+    await this.initializeAuth();
+    
     this.setupEventListeners();
+    
+    // Check if user is authenticated first
+    const isAuthenticated = await this.checkAuthentication();
+    if (!isAuthenticated) {
+      this.showAuthenticationRequired();
+      // Start periodic authentication check
+      this.startPeriodicAuthCheck();
+      return;
+    }
+    
+    // User is authenticated, load the extension
     this.loadJobs();
     this.updateJobCount();
+  }
+
+  async initializeAuth() {
+    try {
+      // Load the Clerk authentication service
+      const authScript = document.createElement('script');
+      authScript.src = chrome.runtime.getURL('src/auth/clerk-auth.js');
+      document.head.appendChild(authScript);
+      
+      // Wait for the script to load
+      await new Promise((resolve) => {
+        authScript.onload = resolve;
+      });
+      
+      // Initialize the auth service
+      this.authService = new ClerkAuthService();
+      console.log('Authentication service initialized');
+    } catch (error) {
+      console.error('Failed to initialize authentication service:', error);
+    }
   }
 
   setupEventListeners() {
@@ -32,25 +68,45 @@ class CareerOSPopup {
     });
 
     // Action buttons
-    document.getElementById('sync-btn').addEventListener('click', () => {
-      this.syncWithCareerOS();
-    });
+    const syncBtn = document.getElementById('sync-btn');
+    if (syncBtn) {
+      console.log('Popup: Sync button found, adding event listener');
+      syncBtn.addEventListener('click', () => {
+        console.log('Popup: Sync button clicked');
+        this.syncWithCareerOS();
+      });
+    } else {
+      console.error('Popup: Sync button not found!');
+    }
 
-    document.getElementById('refresh-jobs').addEventListener('click', () => {
-      this.loadJobs();
-    });
+    const refreshBtn = document.getElementById('refresh-jobs');
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', () => {
+        this.loadJobs();
+      });
+    }
 
-    document.getElementById('open-career-os').addEventListener('click', () => {
-      this.openCareerOS();
-    });
+    const openCareerOSBtn = document.getElementById('open-career-os');
+    if (openCareerOSBtn) {
+      openCareerOSBtn.addEventListener('click', () => {
+        this.openCareerOS();
+      });
+    }
 
-    document.getElementById('settings-btn').addEventListener('click', () => {
-      this.openSettings();
-    });
+    const settingsBtn = document.getElementById('settings-btn');
+    if (settingsBtn) {
+      settingsBtn.addEventListener('click', () => {
+        this.openSettings();
+      });
+    }
 
-    document.getElementById('help-btn').addEventListener('click', () => {
-      this.showHelp();
-    });
+    const helpBtn = document.getElementById('help-btn');
+    if (helpBtn) {
+      helpBtn.addEventListener('click', () => {
+        this.showHelp();
+      });
+    }
+
   }
 
   switchTab(tab) {
@@ -58,13 +114,19 @@ class CareerOSPopup {
     document.querySelectorAll('.tab-btn').forEach(btn => {
       btn.classList.remove('active');
     });
-    document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+    const activeTabBtn = document.querySelector(`[data-tab="${tab}"]`);
+    if (activeTabBtn) {
+      activeTabBtn.classList.add('active');
+    }
 
     // Update tab content
     document.querySelectorAll('.tab-content').forEach(content => {
       content.classList.remove('active');
     });
-    document.getElementById(`${tab}-tab`).classList.add('active');
+    const activeTabContent = document.getElementById(`${tab}-tab`);
+    if (activeTabContent) {
+      activeTabContent.classList.add('active');
+    }
 
     this.currentTab = tab;
 
@@ -84,7 +146,9 @@ class CareerOSPopup {
     const loadingState = document.getElementById('jobs-loading');
     
     // Show loading state
-    loadingState.style.display = 'flex';
+    if (loadingState) {
+      loadingState.style.display = 'flex';
+    }
     jobsList.innerHTML = '<div class="loading-state" id="jobs-loading"><div class="spinner"></div><p>Loading jobs...</p></div>';
 
     try {
@@ -370,22 +434,59 @@ class CareerOSPopup {
   }
 
   async syncWithCareerOS() {
+    let originalContent = '';
+    const syncBtn = document.getElementById('sync-btn');
+    
     try {
+      console.log('Popup: Starting sync with CareerOS...');
+      
+      // Check if user is authenticated
+      if (!this.authService || !this.authService.isUserAuthenticated()) {
+        this.showAuthenticationRequired();
+        return;
+      }
+      
+      // Show loading state on sync button
+      if (syncBtn) {
+        originalContent = syncBtn.innerHTML;
+        syncBtn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border: 2px solid #e5e7eb; border-top: 2px solid #3B82F6; border-radius: 50%; animation: spin 1s linear infinite;"></div>';
+        syncBtn.disabled = true;
+      }
+      
       const response = await this.sendMessage({ action: 'syncWithCareerOS' });
+      
+      console.log('Popup: Sync response:', response);
       
       if (response.success) {
         this.showSuccess('Synced with CareerOS successfully!');
+        // Refresh jobs list to show updated data
+        this.loadJobs();
       } else {
         throw new Error(response.error || 'Failed to sync with CareerOS');
       }
     } catch (error) {
       console.error('Error syncing with CareerOS:', error);
-      this.showError('Failed to sync with CareerOS. Please try again.');
+      
+      // Handle authentication errors specially
+      if (error.message.includes('Please log in to CareerOS first')) {
+        this.showAuthenticationRequired();
+      } else {
+        this.showError(`Failed to sync with CareerOS: ${error.message}`);
+      }
+    } finally {
+      // Restore sync button
+      if (syncBtn && originalContent) {
+        syncBtn.innerHTML = originalContent;
+        syncBtn.disabled = false;
+      }
     }
   }
 
   openCareerOS() {
     chrome.tabs.create({ url: 'http://localhost:3000' });
+    
+    // Show a helpful message
+    this.showNotification('CareerOS opened in new tab. After signing in, click "I\'ve signed in - Check again"', 'info');
   }
 
   openSettings() {
@@ -396,9 +497,144 @@ class CareerOSPopup {
     chrome.tabs.create({ url: 'https://career-os.vercel.app/help' });
   }
 
+
+  showAuthLoading() {
+    const authBtn = document.getElementById('auth-btn');
+    if (authBtn) {
+      authBtn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border: 2px solid #e5e7eb; border-top: 2px solid #3B82F6; border-radius: 50%; animation: spin 1s linear infinite;"></div>';
+      authBtn.disabled = true;
+    }
+  }
+
+  hideAuthLoading() {
+    const authBtn = document.getElementById('auth-btn');
+    if (authBtn) {
+      authBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10,17 15,12 10,7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+      `;
+      authBtn.disabled = false;
+    }
+  }
+
+  async checkAuthentication() {
+    if (!this.authService) {
+      console.log('Authentication service not available');
+      return false;
+    }
+    
+    try {
+      console.log('Checking authentication status...');
+      const isAuthenticated = await this.authService.checkAuthenticationStatus();
+      console.log('Authentication status:', isAuthenticated);
+      return isAuthenticated;
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      return false;
+    }
+  }
+
+  startPeriodicAuthCheck() {
+    // Check authentication every 3 seconds when not authenticated
+    this.authCheckInterval = setInterval(async () => {
+      try {
+        const isAuthenticated = await this.checkAuthentication();
+        if (isAuthenticated) {
+          console.log('Authentication detected! Reloading extension...');
+          clearInterval(this.authCheckInterval);
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('Error in periodic auth check:', error);
+      }
+    }, 3000);
+  }
+
+  async checkAuthenticationAndReload() {
+    const checkBtn = document.getElementById('check-auth-btn');
+    if (checkBtn) {
+      checkBtn.innerHTML = '<div class="spinner" style="width: 16px; height: 16px; border: 2px solid #e5e7eb; border-top: 2px solid #3B82F6; border-radius: 50%; animation: spin 1s linear infinite;"></div>';
+      checkBtn.disabled = true;
+    }
+
+    try {
+      console.log('Checking authentication after user signed in...');
+      this.showNotification('Checking authentication...', 'info');
+      
+      const isAuthenticated = await this.checkAuthentication();
+      
+      if (isAuthenticated) {
+        console.log('User is now authenticated! Reloading extension...');
+        this.showSuccess('Authentication detected! Loading extension...');
+        
+        // Stop periodic check
+        if (this.authCheckInterval) {
+          clearInterval(this.authCheckInterval);
+        }
+        
+        // Small delay to show success message
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+      } else {
+        console.log('User is still not authenticated');
+        this.showError('Still not authenticated. Please make sure you are signed in to CareerOS and try again.');
+      }
+    } catch (error) {
+      console.error('Error checking authentication:', error);
+      this.showError(`Failed to check authentication: ${error.message}`);
+    } finally {
+      if (checkBtn) {
+        checkBtn.innerHTML = `
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+            <path d="M21 3v5h-5"/>
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+            <path d="M3 21v-5h5"/>
+          </svg>
+          I've signed in - Check again
+        `;
+        checkBtn.disabled = false;
+      }
+    }
+  }
+
+  updateAuthUI() {
+    const authBtn = document.getElementById('auth-btn');
+    if (!authBtn || !this.authService) return;
+
+    if (this.authService.isUserAuthenticated()) {
+      authBtn.classList.add('authenticated');
+      authBtn.title = 'Sign Out';
+      authBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16,17 21,12 16,7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      `;
+    } else {
+      authBtn.classList.remove('authenticated');
+      authBtn.title = 'Sign In';
+      authBtn.innerHTML = `
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10,17 15,12 10,7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+      `;
+    }
+  }
+
   updateJobCount() {
     const jobCount = this.jobs.length;
-    document.getElementById('job-count').textContent = `${jobCount} job${jobCount !== 1 ? 's' : ''} bookmarked`;
+    const jobCountElement = document.getElementById('job-count');
+    if (jobCountElement) {
+      jobCountElement.textContent = `${jobCount} job${jobCount !== 1 ? 's' : ''} bookmarked`;
+    }
   }
 
   sendMessage(message) {
@@ -412,15 +648,141 @@ class CareerOSPopup {
   }
 
   showSuccess(message) {
-    // Simple success notification
     console.log('Success:', message);
-    // Could implement toast notifications here
+    this.showNotification(message, 'success');
   }
 
   showError(message) {
-    // Simple error notification
     console.error('Error:', message);
-    // Could implement toast notifications here
+    this.showNotification(message, 'error');
+  }
+
+  showAuthenticationRequired() {
+    // Replace the entire popup content with authentication screen
+    document.body.innerHTML = `
+      <div class="popup-container">
+        <header class="popup-header">
+          <div class="header-content">
+            <img src="../assets/icons/icon-32.png" alt="CareerOS" class="header-icon">
+            <div class="header-text">
+              <h1>CareerOS Job Collector</h1>
+              <p>Sign in required</p>
+            </div>
+          </div>
+        </header>
+        
+        <main class="popup-content">
+          <div class="auth-required">
+            <div class="auth-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10,17 15,12 10,7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
+            </div>
+            <h2>Sign in to CareerOS</h2>
+            <p>You need to sign in to your CareerOS account to use this extension.</p>
+            <button id="sign-in-btn" class="sign-in-button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                <polyline points="10,17 15,12 10,7"/>
+                <line x1="15" y1="12" x2="3" y2="12"/>
+              </svg>
+              Sign in to CareerOS
+            </button>
+            <button id="check-auth-btn" class="check-auth-button">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                <path d="M21 3v5h-5"/>
+                <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/>
+                <path d="M3 21v-5h5"/>
+              </svg>
+              I've signed in - Check again
+            </button>
+            <p class="auth-help">Don't have an account? <a href="http://localhost:3000/sign-up" target="_blank">Create one here</a></p>
+          </div>
+        </main>
+      </div>
+    `;
+    
+    // Add click handlers
+    document.getElementById('sign-in-btn').addEventListener('click', () => {
+      this.openCareerOS();
+    });
+    
+    document.getElementById('check-auth-btn').addEventListener('click', async () => {
+      await this.checkAuthenticationAndReload();
+    });
+  }
+
+  showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <span class="notification-message">${message}</span>
+        <button class="notification-close" onclick="this.parentElement.parentElement.remove()">×</button>
+      </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
+      color: white;
+      padding: 12px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+      max-width: 300px;
+      animation: slideIn 0.3s ease-out;
+    `;
+    
+    // Add animation keyframes
+    if (!document.querySelector('#notification-styles')) {
+      const style = document.createElement('style');
+      style.id = 'notification-styles';
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        .notification-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 8px;
+        }
+        .notification-close {
+          background: none;
+          border: none;
+          color: white;
+          font-size: 16px;
+          cursor: pointer;
+          padding: 0;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+    
+    document.body.appendChild(notification);
+    
+    // Auto-remove after 5 seconds
+    setTimeout(() => {
+      if (notification.parentElement) {
+        notification.remove();
+      }
+    }, 5000);
   }
 
   escapeHtml(text) {
@@ -434,7 +796,7 @@ class CareerOSPopup {
 document.addEventListener('DOMContentLoaded', () => {
   try {
     console.log('Popup: DOM loaded, initializing...');
-    new CareerOSPopup();
+    window.careerOSPopup = new CareerOSPopup();
   } catch (error) {
     console.error('Popup: Error during initialization:', error);
     // Show error message to user
@@ -446,5 +808,12 @@ document.addEventListener('DOMContentLoaded', () => {
         <p>Error: ${error.message}</p>
       </div>
     `;
+  }
+});
+
+// Cleanup when popup is closed
+window.addEventListener('beforeunload', () => {
+  if (window.careerOSPopup && window.careerOSPopup.authCheckInterval) {
+    clearInterval(window.careerOSPopup.authCheckInterval);
   }
 });

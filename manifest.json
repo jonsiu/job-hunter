@@ -7,7 +7,9 @@
     "storage",
     "activeTab",
     "scripting",
-    "notifications"
+    "notifications",
+    "identity",
+    "tabs"
   ],
   "host_permissions": [
     "https://www.linkedin.com/*",
@@ -17,7 +19,10 @@
     "https://stackoverflow.com/jobs/*",
     "https://remote.co/*",
     "https://weworkremotely.com/*",
-    "https://career-os.vercel.app/*"
+    "https://career-os.vercel.app/*",
+    "http://localhost:3000/*",
+    "https://clerk.com/*",
+    "https://*.clerk.accounts.dev/*"
   ],
   "background": {
     "service_worker": "background.js"
@@ -56,7 +61,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["assets/*"],
+      "resources": ["assets/*", "src/auth/*", "auth-callback.html"],
       "matches": ["<all_urls>"]
     }
   ]

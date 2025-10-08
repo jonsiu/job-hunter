@@ -14,6 +14,15 @@ class JobDetector {
     this.initialize();
   }
 
+  // Check if extension context is still valid
+  isExtensionContextValid() {
+    try {
+      return !!(chrome && chrome.runtime && chrome.runtime.sendMessage);
+    } catch (error) {
+      return false;
+    }
+  }
+
   initialize() {
     console.log('CareerOS Job Detector initialized');
     
@@ -26,6 +35,26 @@ class JobDetector {
 
     // Watch for dynamic content changes
     this.observePageChanges();
+    
+    // Periodically check if extension context is still valid
+    this.startContextValidation();
+  }
+
+  startContextValidation() {
+    // Check every 30 seconds if extension context is still valid
+    setInterval(() => {
+      if (!this.isExtensionContextValid()) {
+        console.warn('Extension context invalidated, removing bookmark button');
+        this.removeBookmarkButton();
+      }
+    }, 30000);
+  }
+
+  removeBookmarkButton() {
+    if (this.bookmarkButton && this.bookmarkButton.parentElement) {
+      this.bookmarkButton.parentElement.removeChild(this.bookmarkButton);
+      this.bookmarkButton = null;
+    }
   }
 
   detectJobPosting() {
@@ -377,6 +406,12 @@ class JobDetector {
   }
 
   addBookmarkButton() {
+    // Check if extension context is still valid before adding button
+    if (!this.isExtensionContextValid()) {
+      console.warn('Extension context invalidated, not adding bookmark button');
+      return;
+    }
+
     if (this.bookmarkButton) {
       this.bookmarkButton.remove();
     }
@@ -432,17 +467,36 @@ class JobDetector {
       return;
     }
 
-    // Send message to background script
-    chrome.runtime.sendMessage({
-      action: 'bookmarkJob',
-      jobData: this.jobData
-    }, (response) => {
-      if (response && response.success) {
-        this.showBookmarkSuccess();
-      } else {
-        this.showBookmarkError(response?.error || 'Failed to bookmark job');
-      }
-    });
+    // Check if extension context is still valid
+    if (!this.isExtensionContextValid()) {
+      this.showBookmarkError('Extension context invalidated. Please refresh the page.');
+      return;
+    }
+
+    try {
+
+      // Send message to background script
+      chrome.runtime.sendMessage({
+        action: 'bookmarkJob',
+        jobData: this.jobData
+      }, (response) => {
+        // Check for runtime errors
+        if (chrome.runtime.lastError) {
+          console.error('Runtime error:', chrome.runtime.lastError);
+          this.showBookmarkError('Extension error: ' + chrome.runtime.lastError.message);
+          return;
+        }
+
+        if (response && response.success) {
+          this.showBookmarkSuccess();
+        } else {
+          this.showBookmarkError(response?.error || 'Failed to bookmark job');
+        }
+      });
+    } catch (error) {
+      console.error('Error sending message to background script:', error);
+      this.showBookmarkError('Extension context invalidated. Please refresh the page.');
+    }
   }
 
   showBookmarkSuccess() {
