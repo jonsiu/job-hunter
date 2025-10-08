@@ -94,24 +94,79 @@ class JobDetector {
 
   extractLinkedInJob() {
     try {
-      const title = this.getTextContent('.job-details-jobs-unified-top-card__job-title') ||
-                   this.getTextContent('h1[data-test-id="job-title"]') ||
-                   this.getTextContent('.job-details-jobs-unified-top-card__job-title-text');
-      
-      const company = this.getTextContent('.job-details-jobs-unified-top-card__company-name') ||
-                     this.getTextContent('a[data-test-id="job-company-name"]') ||
-                     this.getTextContent('.job-details-jobs-unified-top-card__company-name-text');
-      
-      const location = this.getTextContent('.job-details-jobs-unified-top-card__bullet') ||
-                      this.getTextContent('.job-details-jobs-unified-top-card__job-location');
-      
-      const description = this.getTextContent('.jobs-description-content__text') ||
-                         this.getTextContent('.jobs-box__html-content') ||
-                         this.getTextContent('[data-test-id="job-description"]');
+      const parsingMetadata = {
+        extractedAt: new Date().toISOString(),
+        linkedInVersion: this.detectLinkedInVersion(),
+        selectors: {},
+        fallbackUsed: false,
+        confidence: 0
+      };
 
-      if (!title || !company) return null;
+      // Enhanced title extraction with multiple fallback strategies
+      const titleSelectors = [
+        '.job-details-jobs-unified-top-card__job-title',
+        'h1[data-test-id="job-title"]',
+        '.job-details-jobs-unified-top-card__job-title-text',
+        '.jobs-unified-top-card__job-title',
+        '.job-details-jobs-unified-top-card__job-title-link',
+        'h1.job-title',
+        '[data-test-id="job-title"]',
+        '.job-title'
+      ];
+      
+      const title = this.extractWithFallbacks(titleSelectors, 'title', parsingMetadata);
+      
+      // Enhanced company extraction with multiple fallback strategies
+      const companySelectors = [
+        '.job-details-jobs-unified-top-card__company-name',
+        'a[data-test-id="job-company-name"]',
+        '.job-details-jobs-unified-top-card__company-name-text',
+        '.jobs-unified-top-card__company-name',
+        '.job-details-jobs-unified-top-card__company-name-link',
+        '.company-name',
+        '[data-test-id="company-name"]',
+        '.employer-name'
+      ];
+      
+      const company = this.extractWithFallbacks(companySelectors, 'company', parsingMetadata);
+      
+      // Enhanced location extraction
+      const locationSelectors = [
+        '.job-details-jobs-unified-top-card__bullet',
+        '.job-details-jobs-unified-top-card__job-location',
+        '.jobs-unified-top-card__job-location',
+        '.job-location',
+        '[data-test-id="job-location"]',
+        '.location'
+      ];
+      
+      const location = this.extractWithFallbacks(locationSelectors, 'location', parsingMetadata);
+      
+      // Enhanced description extraction with raw HTML storage
+      const descriptionSelectors = [
+        '.jobs-description-content__text',
+        '.jobs-box__html-content',
+        '[data-test-id="job-description"]',
+        '.job-description',
+        '.jobs-description',
+        '.description-content',
+        '.job-details-jobs-unified-top-card__job-description'
+      ];
+      
+      const description = this.extractWithFallbacks(descriptionSelectors, 'description', parsingMetadata);
+      
+      // Store raw HTML for offline re-parsing
+      const rawJobDescriptionHtml = this.extractRawJobDescriptionHtml();
+      
+      if (!title || !company) {
+        parsingMetadata.confidence = 0;
+        return null;
+      }
 
-      return {
+      // Calculate confidence based on successful extractions
+      parsingMetadata.confidence = this.calculateExtractionConfidence(title, company, location, description);
+
+      const jobData = {
         title: title.trim(),
         company: company.trim(),
         location: location?.trim() || 'Not specified',
@@ -121,8 +176,15 @@ class JobDetector {
         salary: this.extractSalary(),
         remote: this.detectRemoteWork(),
         requirements: this.extractRequirements(description),
-        skills: this.extractSkills(description)
+        skills: this.extractSkills(description),
+        // NEW: Raw HTML storage for offline re-parsing
+        rawJobDescriptionHtml: rawJobDescriptionHtml,
+        // NEW: Parsing metadata tracking
+        parsingMetadata: parsingMetadata
       };
+
+      console.log('LinkedIn job extracted with confidence:', parsingMetadata.confidence, parsingMetadata);
+      return jobData;
     } catch (error) {
       console.error('Error extracting LinkedIn job:', error);
       return null;
@@ -334,6 +396,85 @@ class JobDetector {
   getTextContent(selector) {
     const element = document.querySelector(selector);
     return element ? element.textContent : null;
+  }
+
+  // NEW: Enhanced extraction with fallback strategies
+  extractWithFallbacks(selectors, fieldName, metadata) {
+    for (let i = 0; i < selectors.length; i++) {
+      const selector = selectors[i];
+      const element = document.querySelector(selector);
+      
+      if (element && element.textContent && element.textContent.trim()) {
+        metadata.selectors[fieldName] = {
+          selector: selector,
+          index: i,
+          success: true
+        };
+        
+        // Mark as fallback if not the first selector
+        if (i > 0) {
+          metadata.fallbackUsed = true;
+        }
+        
+        return element.textContent.trim();
+      }
+    }
+    
+    // No selector worked
+    metadata.selectors[fieldName] = {
+      success: false,
+      attemptedSelectors: selectors
+    };
+    
+    return null;
+  }
+
+  // NEW: Detect LinkedIn version for metadata tracking
+  detectLinkedInVersion() {
+    // Try to detect LinkedIn's current version/design
+    if (document.querySelector('.jobs-unified-top-card')) {
+      return 'unified-top-card';
+    } else if (document.querySelector('.job-details-jobs-unified-top-card')) {
+      return 'job-details-unified';
+    } else if (document.querySelector('[data-test-id="job-title"]')) {
+      return 'test-id-based';
+    } else {
+      return 'legacy';
+    }
+  }
+
+  // NEW: Extract raw HTML for offline re-parsing
+  extractRawJobDescriptionHtml() {
+    const descriptionSelectors = [
+      '.jobs-description-content__text',
+      '.jobs-box__html-content',
+      '[data-test-id="job-description"]',
+      '.job-description',
+      '.jobs-description',
+      '.description-content',
+      '.job-details-jobs-unified-top-card__job-description'
+    ];
+
+    for (const selector of descriptionSelectors) {
+      const element = document.querySelector(selector);
+      if (element) {
+        return element.outerHTML;
+      }
+    }
+    
+    return null;
+  }
+
+  // NEW: Calculate extraction confidence
+  calculateExtractionConfidence(title, company, location, description) {
+    let confidence = 0;
+    
+    if (title && title.length > 0) confidence += 30;
+    if (company && company.length > 0) confidence += 30;
+    if (location && location.length > 0) confidence += 20;
+    if (description && description.length > 50) confidence += 20;
+    
+    return Math.min(confidence, 100);
   }
 
   extractSalary() {
@@ -549,5 +690,10 @@ class JobDetector {
 
 // Initialize the job detector
 new JobDetector();
+
+// Export for testing
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { JobDetector };
+}
 
 } // End of initialization check
