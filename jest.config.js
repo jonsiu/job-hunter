@@ -2,7 +2,7 @@ module.exports = {
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   testMatch: [
-    '<rootDir>/__tests__/**/*.test.js',
+    '<rootDir>/tests/**/*.test.js',
     '<rootDir>/src/**/__tests__/**/*.test.js'
   ],
   collectCoverageFrom: [
@@ -10,7 +10,7 @@ module.exports = {
     'background.js',
     'src/**/*.js',
     '!**/node_modules/**',
-    '!**/__tests__/**'
+    '!**/tests/**'
   ],
   coverageThreshold: {
     global: {
