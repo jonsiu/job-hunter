@@ -65,7 +65,7 @@ describe('Enhanced ClerkAuthService', () => {
       timestamp: Date.now()
     };
 
-    // Mock chrome.storage.local.get
+    // Mock chrome.storage.local.get with default behavior
     chrome.storage.local.get.mockImplementation((keys, callback) => {
       const result = {};
       if (keys.includes('settings')) {
@@ -116,15 +116,6 @@ describe('Enhanced ClerkAuthService', () => {
         json: () => Promise.resolve({ success: true, valid: true })
       });
 
-      // Ensure the service has the mock auth data
-      chrome.storage.local.get.mockImplementation((keys, callback) => {
-        const result = {};
-        if (keys.includes('clerkAuth')) {
-          result.clerkAuth = mockAuthData;
-        }
-        callback(result);
-      });
-
       const result = await authService.checkStoredAuth();
       
       expect(result.success).toBe(true);
@@ -136,6 +127,9 @@ describe('Enhanced ClerkAuthService', () => {
     test('should fail with no stored auth data', async () => {
       chrome.storage.local.get.mockImplementation((keys, callback) => {
         const result = {};
+        if (keys.includes('settings')) {
+          result.settings = mockSettings;
+        }
         if (keys.includes('clerkAuth')) {
           result.clerkAuth = null;
         }
@@ -156,6 +150,9 @@ describe('Enhanced ClerkAuthService', () => {
 
       chrome.storage.local.get.mockImplementation((keys, callback) => {
         const result = {};
+        if (keys.includes('settings')) {
+          result.settings = mockSettings;
+        }
         if (keys.includes('clerkAuth')) {
           result.clerkAuth = expiredAuthData;
         }
@@ -174,15 +171,6 @@ describe('Enhanced ClerkAuthService', () => {
       fetch.mockResolvedValueOnce({
         ok: false,
         status: 401
-      });
-
-      // Ensure the service has the mock auth data
-      chrome.storage.local.get.mockImplementation((keys, callback) => {
-        const result = {};
-        if (keys.includes('clerkAuth')) {
-          result.clerkAuth = mockAuthData;
-        }
-        callback(result);
       });
 
       const result = await authService.checkStoredAuth();
@@ -347,8 +335,7 @@ describe('Enhanced ClerkAuthService', () => {
             code: 'TEST_ERROR',
             retryCount: 1
           })
-        }),
-        expect.any(Function)
+        })
       );
       
       jest.useRealTimers();

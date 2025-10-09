@@ -433,7 +433,9 @@ class ClerkAuthService {
     try {
       console.log('🔍 Strategy 1: Checking stored authentication data...');
       
-      const result = await chrome.storage.local.get(['clerkAuth']);
+      const result = await new Promise((resolve) => {
+        chrome.storage.local.get(['clerkAuth'], resolve);
+      });
       const authData = result.clerkAuth;
       
       if (!authData || !authData.token || !authData.user) {
