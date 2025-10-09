@@ -78,7 +78,11 @@ const configs: Record<string, EnvironmentConfig> = {
 // Get configuration based on environment
 export function getConfig(): EnvironmentConfig {
   const env = detectEnvironment();
-  return configs[env];
+  const config = configs[env];
+  if (!config) {
+    throw new Error(`No configuration found for environment: ${env}`);
+  }
+  return config;
 }
 
 // Get configuration with user overrides

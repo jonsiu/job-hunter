@@ -133,7 +133,7 @@ if (fs.existsSync(manifestPath)) {
 const buildInfo = {
   environment,
   buildTime: new Date().toISOString(),
-  version: require('./package.json').version,
+  version: require('../package.json').version,
   nodeVersion: process.version,
   platform: process.platform,
 };
