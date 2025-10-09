@@ -54,23 +54,59 @@ console.log('Copying static assets...');
 const assetsDir = 'assets';
 const distAssetsDir = 'dist/assets';
 
+// Directories and files to exclude from copying
+const excludePatterns = [
+  'tests',
+  '__tests__',
+  'node_modules',
+  'dist',
+  'src',
+  'scripts',
+  '*.test.js',
+  '*.test.ts',
+  '*.spec.js',
+  '*.spec.ts',
+  'jest.config.js',
+  'jest.setup.js',
+  'tsconfig.json',
+  'package.json',
+  'package-lock.json'
+];
+
 if (fs.existsSync(assetsDir)) {
   if (!fs.existsSync(distAssetsDir)) {
     fs.mkdirSync(distAssetsDir, { recursive: true });
   }
   
-  // Copy assets recursively
+  // Copy assets recursively with exclusions
   function copyRecursive(src, dest) {
     const stats = fs.statSync(src);
     if (stats.isDirectory()) {
+      // Skip excluded directories
+      if (excludePatterns.some(pattern => src.includes(pattern))) {
+        return;
+      }
+      
       if (!fs.existsSync(dest)) {
         fs.mkdirSync(dest);
       }
       const files = fs.readdirSync(src);
       files.forEach(file => {
-        copyRecursive(path.join(src, file), path.join(dest, file));
+        const srcPath = path.join(src, file);
+        const destPath = path.join(dest, file);
+        
+        // Skip excluded files
+        if (excludePatterns.some(pattern => file.includes(pattern))) {
+          return;
+        }
+        
+        copyRecursive(srcPath, destPath);
       });
     } else {
+      // Skip excluded files
+      if (excludePatterns.some(pattern => src.includes(pattern))) {
+        return;
+      }
       fs.copyFileSync(src, dest);
     }
   }
@@ -133,7 +169,7 @@ if (fs.existsSync(manifestPath)) {
 const buildInfo = {
   environment,
   buildTime: new Date().toISOString(),
-  version: require('./package.json').version,
+  version: require('../package.json').version,
   nodeVersion: process.version,
   platform: process.platform,
 };

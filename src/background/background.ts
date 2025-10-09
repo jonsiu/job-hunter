@@ -130,9 +130,7 @@ class CareerOSBackground {
       const newJob: JobBookmark = {
         ...jobData,
         id: this.generateJobId(),
-        bookmarkedAt: new Date().toISOString(),
-        lastAnalyzed: undefined,
-        analysis: undefined
+        bookmarkedAt: new Date().toISOString()
       };
 
       bookmarkedJobs.push(newJob);

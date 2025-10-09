@@ -6,10 +6,7 @@ yarn-error.log*
 
 # Build outputs
 dist/
-build/
 *.zip
-*.crx
-*.xpi
 
 # Environment files
 .env
@@ -18,14 +15,14 @@ build/
 .env.test.local
 .env.production.local
 
-# IDE and editor files
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS generated files
+# OS files
 .DS_Store
 .DS_Store?
 ._*
@@ -35,11 +32,11 @@ ehthumbs.db
 Thumbs.db
 
 # Logs
-logs/
+logs
 *.log
 
 # Runtime data
-pids/
+pids
 *.pid
 *.seed
 *.pid.lock
@@ -51,11 +48,20 @@ coverage/
 # nyc test coverage
 .nyc_output
 
-# ESLint cache
-.eslintcache
+# Dependency directories
+jspm_packages/
 
 # Optional npm cache directory
 .npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
 
 # Optional REPL history
 .node_repl_history
@@ -70,31 +76,39 @@ coverage/
 .cache
 .parcel-cache
 
-# Next.js build output
+# next.js build output
 .next
 
-# Nuxt.js build / generate output
+# nuxt.js build output
 .nuxt
 
-# Gatsby files
-.cache/
-public
+# vuepress build output
+.vuepress/dist
 
-# Storybook build outputs
-.out
-.storybook-out
+# Serverless directories
+.serverless/
 
-# Temporary folders
-tmp/
-temp/
+# FuseBox cache
+.fusebox/
 
-# Browser extension specific
-*.pem
-*.key
-web-accessible-resources/
+# DynamoDB Local files
+.dynamodb/
+
+# TernJS port file
+.tern-port
+
+# Extension specific
+# Never include test files in extension builds
+tests/
+__tests__/
+*.test.js
+*.test.ts
+*.spec.js
+*.spec.ts
+
+# Jest
+jest.config.js
+jest.setup.js
 
 # TypeScript
 *.tsbuildinfo
-
-# Local development
-.local

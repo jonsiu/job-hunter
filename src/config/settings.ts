@@ -44,10 +44,12 @@ export class SettingsManager {
       
       // Merge with environment configuration
       const envConfig = await getConfigWithOverrides();
-      this.settings.careerOSUrl = envConfig.careerOSUrl;
+      if (this.settings) {
+        this.settings.careerOSUrl = envConfig.careerOSUrl;
+      }
       
       debugLog('Settings loaded:', this.settings);
-      return this.settings;
+      return this.settings || this.getDefaultSettings();
     } catch (error) {
       console.error('Error loading settings:', error);
       this.settings = this.getDefaultSettings();
