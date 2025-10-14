@@ -11,7 +11,7 @@ class CareerOSBackground {
     console.log('CareerOS Job Collector initialized');
     
     // Set up default storage
-    chrome.storage.local.get(['bookmarkedJobs', 'userProfile', 'settings'], (result) => {
+    chrome.storage.local.get(['bookmarkedJobs', 'userProfile', 'settings', 'lastSync'], (result) => {
       if (!result.bookmarkedJobs) {
         chrome.storage.local.set({ bookmarkedJobs: [] });
       }
@@ -27,6 +27,9 @@ class CareerOSBackground {
             careerOSUrl: 'http://localhost:3000'
           }
         });
+      }
+      if (!result.lastSync) {
+        chrome.storage.local.set({ lastSync: null });
       }
     });
   }
@@ -236,7 +239,7 @@ class CareerOSBackground {
 
   async syncWithCareerOS() {
     try {
-      const settings = await this.getSettings();
+      const { settings } = await chrome.storage.local.get(['settings']);
       const jobs = await this.getBookmarkedJobs();
       
       if (!settings?.careerOSUrl) {
@@ -247,23 +250,17 @@ class CareerOSBackground {
         console.log('No jobs to sync');
         return { success: true, message: 'No jobs to sync', synced: 0 };
       }
-      
-      // Get authentication token from storage
-      const authData = await this.getAuthData();
-      if (!authData || !authData.token) {
-        throw new Error('Please log in to CareerOS first. Click the authentication button to sign in.');
-      }
-      
+
       console.log('Syncing with CareerOS:', settings.careerOSUrl, 'Jobs:', jobs.length);
-      
-      // Make API call to CareerOS with authentication token
+
+      // Make API call to CareerOS with cookie-based authentication
       const response = await fetch(`${settings.careerOSUrl}/api/jobs/sync`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': `Bearer ${authData.token}`
         },
+        credentials: 'include', // Include cookies for Clerk authentication
         body: JSON.stringify({ jobs })
       });
 
@@ -284,6 +281,9 @@ class CareerOSBackground {
 
       const result = await response.json();
       console.log('Synced with CareerOS:', result);
+
+      // Update lastSync timestamp
+      await chrome.storage.local.set({ lastSync: new Date().toISOString() });
       
       return result;
     } catch (error) {
@@ -303,20 +303,22 @@ class CareerOSBackground {
   async syncJobWithCareerOS(job) {
     try {
       const settings = await this.getSettings();
-      
+
       if (!settings?.careerOSUrl) {
         console.warn('CareerOS URL not configured, skipping job sync');
         return;
       }
-      
+
       console.log('Syncing job with CareerOS:', job.title);
-      
-      // Make API call to CareerOS
+
+      // Make API call to CareerOS with credentials for cookie-based auth
       const response = await fetch(`${settings.careerOSUrl}/api/jobs/bookmark`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json',
         },
+        credentials: 'include', // Include cookies for Clerk authentication
         body: JSON.stringify(job)
       });
 
@@ -326,7 +328,10 @@ class CareerOSBackground {
 
       const result = await response.json();
       console.log('Job synced with CareerOS:', result);
-      
+
+      // Update lastSync timestamp
+      await chrome.storage.local.set({ lastSync: new Date().toISOString() });
+
     } catch (error) {
       console.error('Error syncing job with CareerOS:', error);
     }
@@ -349,7 +354,7 @@ class CareerOSBackground {
       // Try to access a protected endpoint to check authentication
       // Use the jobs endpoint as it requires authentication
       const response = await fetch(`${careerOSUrl}/api/jobs/sync`, {
-        method: 'GET',
+        method: 'HEAD',
         credentials: 'include',
         headers: {
           'Accept': 'application/json',

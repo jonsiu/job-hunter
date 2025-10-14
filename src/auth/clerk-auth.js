@@ -190,7 +190,7 @@ class ClerkAuthService {
       
       // Find CareerOS tab
       const careerOSTab = tabs.find(tab => 
-        tab.url && (tab.url.includes('localhost:3000') || tab.url.includes('career-os'))
+        tab.url && (tab.url === careerOSUrl || tab.url.startsWith(careerOSUrl + '/'))
       );
       
       if (!careerOSTab) {
