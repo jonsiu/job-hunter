@@ -1,0 +1,22 @@
+## Security fundamentals for all software
+
+- **Never Commit Secrets**: Never commit API keys, tokens, passwords, or credentials to version control
+- **HTTPS/TLS Required**: Use HTTPS/TLS for all network communications; never transmit sensitive data over plain HTTP
+- **Input Validation**: Validate and sanitize all user input to prevent injection attacks (SQL injection, XSS, command injection)
+- **Principle of Least Privilege**: Grant minimum necessary permissions; users and services should only access what they need
+- **Authentication Required**: Require authentication by default; explicitly mark public endpoints/features
+- **Authorization Checks**: Verify users have permission for specific resources, not just general access
+- **Secure Error Messages**: Return generic error messages to users; never expose stack traces, file paths, or internal details
+- **Security Headers**: Set appropriate security headers (Content-Security-Policy, X-Frame-Options, X-Content-Type-Options, HSTS)
+- **Dependency Vulnerabilities**: Regularly scan dependencies for known vulnerabilities and update promptly
+- **Sensitive Data in Logs**: Never log sensitive data (passwords, tokens, API keys, PII, credit cards)
+- **Password Requirements**: Enforce strong password requirements; use bcrypt, scrypt, or Argon2 for password hashing
+- **Session Management**: Use secure session tokens; set appropriate timeouts; invalidate sessions on logout
+- **Rate Limiting**: Implement rate limiting to prevent brute force and DoS attacks
+- **CORS Configuration**: Configure CORS restrictively; whitelist specific origins instead of using wildcards
+- **SQL Injection Prevention**: Use parameterized queries or ORMs; never concatenate user input into SQL statements
+- **XSS Prevention**: Sanitize outputs; escape user-generated content; set correct Content-Type headers
+- **File Upload Security**: Validate file types and sizes; scan for malware; store uploads outside web root
+- **Cryptography Standards**: Use established cryptographic libraries; never roll your own crypto
+- **Security Updates**: Keep all frameworks, libraries, and dependencies updated with security patches
+- **Defense in Depth**: Implement security at multiple layers; don't rely on a single security measure

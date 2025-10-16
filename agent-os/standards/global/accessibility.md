@@ -1,0 +1,27 @@
+## Accessibility standards
+
+- **WCAG Compliance**: Target WCAG 2.1 Level AA minimum for all user-facing interfaces
+- **Screen Reader Support**: Test with NVDA (Windows), JAWS (Windows), VoiceOver (macOS/iOS), TalkBack (Android)
+- **Semantic HTML**: Use proper HTML5 semantic elements (nav, main, article, aside, header, footer)
+- **ARIA Labels**: Add ARIA labels, roles, and properties where native semantics are insufficient
+- **Keyboard Navigation**: All interactive elements must be keyboard accessible (Tab, Enter, Space, Escape, Arrow keys)
+- **Focus Management**: Visible focus indicators with sufficient contrast (3:1 minimum); manage focus for modals and dynamic content
+- **Color Contrast**: Minimum 4.5:1 for normal text, 3:1 for large text (18pt+ or 14pt+ bold), 3:1 for UI components
+- **Alt Text**: Provide descriptive alt text for images; use empty alt="" for decorative images
+- **Form Accessibility**: Associate labels with inputs; provide error messages and hints; indicate required fields
+- **Skip Links**: Provide "Skip to main content" links for keyboard users
+- **Responsive Text**: Support browser zoom up to 200%; use relative units (rem, em) not fixed pixels
+- **Motion and Animation**: Respect prefers-reduced-motion; provide controls for auto-playing content
+- **Document Structure**: Use proper heading hierarchy (h1 → h2 → h3); only one h1 per page
+- **Link Purpose**: Link text should describe destination; avoid "click here" or "read more" without context
+- **Testing Tools**: Use axe DevTools, Lighthouse, WAVE, or pa11y for automated accessibility testing
+- **Manual Testing**: Conduct keyboard-only navigation testing; test with actual screen readers
+- **Accessible Names**: Ensure all interactive elements have accessible names (via text content, aria-label, or aria-labelledby)
+- **Live Regions**: Use ARIA live regions to announce dynamic content updates to screen readers
+- **Error Prevention**: Provide clear instructions and validation; allow users to review and correct input
+- **Time Limits**: Avoid time limits or allow users to extend or disable them; warn before timeout
+- **Flashing Content**: Avoid content that flashes more than 3 times per second (seizure risk)
+- **Language**: Specify document language with lang attribute; mark language changes inline
+- **Touch Targets**: Minimum 44x44px touch target size for mobile; adequate spacing between targets
+- **Consistent Navigation**: Keep navigation consistent across pages; maintain predictable behavior
+- **Context Changes**: Don't trigger navigation or form submission on focus; require explicit user action

@@ -1,0 +1,26 @@
+## Cross-browser extension compatibility
+
+- **WebExtensions API**: Use WebExtensions API standard; supported by Chrome, Firefox, Edge, Safari (mostly)
+- **Browser Namespace**: Firefox uses `browser.*` namespace; Chrome uses `chrome.*`; use webextension-polyfill for compatibility
+- **Promises vs Callbacks**: Firefox APIs return Promises; Chrome uses callbacks; polyfill bridges this gap
+- **Manifest Differences**: Some manifest fields differ; maintain separate manifests or use build-time substitution
+- **Safari Differences**: Safari extensions require native app wrapper; use Xcode to create extension
+- **Safari Manifest**: Safari requires special manifest keys; see Apple's Safari Web Extensions documentation
+- **Permission Differences**: Some permissions named differently or unsupported; check browser compatibility tables
+- **Content Security Policy**: CSP syntax varies slightly; test in all browsers
+- **Storage API**: Generally compatible but Safari has stricter limits; test storage quota in all browsers
+- **Tabs API**: Mostly compatible; some advanced features Chrome-only
+- **Web Request API**: Firefox has blocking webRequest; Chrome MV3 uses declarativeNetRequest
+- **Declarative Net Request**: Chrome MV3 required pattern; Firefox still supports webRequest in MV3
+- **Context Menus**: context_menus vs menus API; use polyfill for compatibility
+- **Downloads API**: Mostly compatible; some options differ
+- **Browser Actions**: browser_action (MV2) vs action (MV3); unified in MV3
+- **Background Scripts**: Firefox supports persistent background pages in MV3; Chrome requires service workers
+- **Testing Matrix**: Test in Chrome, Firefox, Edge, Safari; don't assume compatibility
+- **Feature Detection**: Use feature detection not browser detection; check if API exists before using
+- **Polyfills**: Use webextension-polyfill for API compatibility
+- **Build Process**: Set up build process to generate browser-specific builds
+- **Update Channels**: Different browsers have different review times; plan releases accordingly
+- **Store Requirements**: Each store has different requirements; review guidelines before submission
+- **Firefox AMO**: Firefox Add-ons require source code submission if using minification or bundling
+- **Safari App Store**: Safari extensions distributed via Mac App Store; different review process

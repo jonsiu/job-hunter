@@ -1,0 +1,28 @@
+## Advanced security practices
+
+- **Shift-Left Security**: Integrate security into development process; catch vulnerabilities early in SDLC
+- **Static Analysis (SAST)**: Run static analysis tools in CI (SonarQube, Semgrep, CodeQL, Checkmarx)
+- **Dynamic Analysis (DAST)**: Run dynamic analysis against running application (OWASP ZAP, Burp Suite)
+- **Dependency Scanning**: Scan dependencies for known vulnerabilities (Snyk, Dependabot, npm audit, OWASP Dependency-Check)
+- **Container Scanning**: Scan container images for vulnerabilities (Trivy, Clair, Anchore); scan base images and layers
+- **Secret Scanning**: Scan code for accidentally committed secrets (git-secrets, TruffleHog, GitGuardian)
+- **Infrastructure as Code Scanning**: Scan IaC templates for misconfigurations (Checkov, tfsec, Terrascan)
+- **Security Headers**: Implement security headers (CSP, HSTS, X-Frame-Options, X-Content-Type-Options, Referrer-Policy)
+- **Content Security Policy**: Define strict CSP; avoid unsafe-inline and unsafe-eval; use nonces for inline scripts
+- **Threat Modeling**: Conduct threat modeling for new features (STRIDE methodology); identify threats and mitigations
+- **Attack Surface**: Minimize attack surface; disable unused features and endpoints; principle of least privilege
+- **Zero Trust**: Assume breach; verify explicitly; use least privilege access; segment network
+- **Defense in Depth**: Layer security controls; if one fails, others provide protection
+- **Security Testing**: Perform penetration testing annually or after major changes; bug bounty program for mature products
+- **Vulnerability Management**: Establish vulnerability management process; prioritize by severity and exploitability
+- **Patch Management**: Keep systems patched; automate patching where possible; test patches before production
+- **Secure Defaults**: Use secure defaults; require opt-in for less secure options
+- **Rate Limiting**: Implement rate limiting to prevent brute force, credential stuffing, and DoS attacks
+- **WAF (Web Application Firewall)**: Use WAF to block common attacks (SQL injection, XSS, path traversal)
+- **DDoS Protection**: Use DDoS mitigation service (Cloudflare, AWS Shield) for public-facing services
+- **API Security**: Follow OWASP API Security Top 10; implement authentication, authorization, rate limiting, input validation
+- **Encryption at Rest**: Encrypt sensitive data at rest; use managed encryption services; rotate keys regularly
+- **Encryption in Transit**: Use TLS 1.2+ for all connections; disable older protocols (SSLv3, TLS 1.0, TLS 1.1)
+- **Certificate Management**: Automate certificate renewal; use Let's Encrypt or managed certificate services
+- **Security Awareness**: Train developers on secure coding; run phishing simulations; security champions program
+- **Incident Response Plan**: Document incident response plan; define roles; practice with tabletop exercises

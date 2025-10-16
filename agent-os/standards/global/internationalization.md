@@ -1,0 +1,27 @@
+## Internationalization (i18n) and localization (l10n)
+
+- **i18n Library**: Use established i18n library (i18next, FormatJS, Fluent, gettext, ICU MessageFormat)
+- **Locale Detection**: Detect user locale from Accept-Language header, user preferences, or geo-IP
+- **Language Switching**: Provide UI for users to change language; persist preference across sessions
+- **Text Externalization**: Extract all user-facing text into translation files; no hardcoded strings in code
+- **Translation Keys**: Use descriptive, namespaced keys (e.g., `auth.login.submit_button`)
+- **Default Language**: Define fallback language (typically English) when translations missing
+- **Pluralization**: Handle plural forms correctly per language (some languages have 6+ plural forms)
+- **Number Formatting**: Format numbers according to locale (1,000.50 vs 1.000,50 vs 1 000,50)
+- **Date and Time**: Format dates and times per locale; consider timezone display and conversion
+- **Currency**: Display currency symbols and formatting per locale; store amounts in neutral format
+- **RTL Support**: Design for right-to-left languages (Arabic, Hebrew, Persian); test layout mirroring
+- **Text Expansion**: Account for text expansion (German can be 30% longer than English); avoid fixed widths
+- **Context for Translators**: Provide context and screenshots for translators; note character limits
+- **Interpolation**: Use variable interpolation for dynamic values (e.g., `Hello {{name}}`)
+- **Translation Management**: Use translation management system (Lokalise, Crowdin, POEditor, Phrase)
+- **Translation Workflow**: Define workflow (extract keys → translate → review → integrate)
+- **Pseudo-Localization**: Test with pseudo-localization to catch i18n bugs before actual translation
+- **Character Encoding**: Use UTF-8 throughout; handle emoji and special characters properly
+- **Sorting and Collation**: Use locale-aware sorting (Intl.Collator); alphabetization differs by language
+- **Input Validation**: Validate international formats (phone numbers, postal codes, names with diacritics)
+- **Search**: Implement locale-aware search (accent-insensitive, case-insensitive per language rules)
+- **SEO**: Use hreflang tags for multi-language SEO; provide translated URLs or subdirectories
+- **Images and Media**: Consider cultural appropriateness of images; provide translated alt text
+- **Legal and Policy**: Translate terms of service, privacy policy, and legal text; consider legal requirements per region
+- **Testing**: Test with actual native speakers; automated translation quality varies

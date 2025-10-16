@@ -1,0 +1,25 @@
+## Browser extension debugging
+
+- **Extension Page**: Use chrome://extensions in Developer mode to inspect extension
+- **Background Script Debugging**: Click "Service worker" or "background page" link to open DevTools
+- **Content Script Debugging**: Open DevTools on page; content scripts appear in Sources tab under Content scripts
+- **Popup Debugging**: Right-click popup, select "Inspect"; DevTools stays open even when popup closes
+- **Console Logging**: Use console.log(); logs appear in respective context's DevTools (background, content, popup)
+- **Debugging Context**: Understand context: background, content scripts, popup, options page each have separate DevTools
+- **Error Messages**: Check extension page (chrome://extensions) for error messages; shows recent errors
+- **Breakpoints**: Set breakpoints in Sources tab; works for background, content, and popup scripts
+- **Source Maps**: Generate source maps for bundled code; debug original TypeScript/source code
+- **Live Reload**: Use extension reload tools (webpack-extension-plugin, Plasmo HMR) for faster iteration
+- **Logs Across Contexts**: Use chrome.runtime.sendMessage to relay logs to central location
+- **Storage Inspection**: Inspect chrome.storage using DevTools Application tab or dedicated storage viewer
+- **Network Debugging**: Monitor network requests in Network tab; filter by extension requests
+- **Permission Warnings**: Check for permission warnings in console; missing permissions fail silently
+- **Message Passing**: Log message passing; helps debug communication between contexts
+- **Error Tracking**: Use Sentry or similar for production error tracking; catch errors users encounter
+- **Remote Debugging**: For mobile browsers, use remote debugging to debug extensions on mobile
+- **Firefox Debugging**: Use about:debugging in Firefox; different UI than Chrome
+- **Safari Debugging**: Use Safari Web Inspector; enable Develop menu in Safari preferences
+- **Performance Profiling**: Use Performance tab in DevTools; identify bottlenecks
+- **Memory Profiling**: Take heap snapshots; find memory leaks
+- **Manifest Errors**: Manifest validation errors appear on extension page; fix before testing
+- **Hot Reload**: Set up hot reload for CSS and simple changes; full reload for logic changes

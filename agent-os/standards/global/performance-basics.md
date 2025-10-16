@@ -1,0 +1,31 @@
+## Performance best practices
+
+- **Profile Before Optimizing**: Always profile to identify actual bottlenecks before optimizing; don't guess
+- **Avoid Premature Optimization**: Focus on correct, maintainable code first; optimize only proven bottlenecks
+- **Performance Budgets**: Define performance budgets (response times, load times, resource usage) and monitor them
+- **Measure and Monitor**: Continuously measure key performance metrics in production; track trends over time
+- **Caching Strategy**: Implement caching at appropriate layers (in-memory, CDN, database, HTTP) to reduce redundant work
+- **Cache Invalidation**: Have a clear cache invalidation strategy; stale caches cause bugs
+- **Lazy Loading**: Load resources only when needed rather than all upfront (images, modules, data)
+- **Pagination**: Use pagination for large datasets; never return unbounded result sets
+- **Database Indexing**: Index frequently queried columns; but balance with write performance impact
+- **N+1 Query Problem**: Avoid N+1 queries; use joins, eager loading, or batching to minimize database round trips
+- **Connection Pooling**: Use connection pooling for databases and external services to reduce connection overhead
+- **Asynchronous Operations**: Use async/await or non-blocking I/O for I/O-bound operations
+- **Parallel Execution**: Execute independent operations in parallel when possible
+- **Batch Processing**: Batch related operations together to reduce overhead (database inserts, API calls)
+- **Resource Cleanup**: Always clean up resources (close connections, release memory, cancel subscriptions)
+- **Memory Management**: Be aware of memory usage; avoid memory leaks by properly disposing of objects and listeners
+- **Data Structure Selection**: Choose appropriate data structures for your use case (arrays, hash maps, trees, sets)
+- **Algorithm Complexity**: Understand time and space complexity of algorithms; prefer O(log n) or O(n) over O(n²)
+- **Minimize Network Calls**: Reduce network round trips; batch requests, use WebSockets for real-time, compress payloads
+- **Compression**: Use gzip/brotli compression for text-based resources (HTML, CSS, JS, JSON, APIs)
+- **Content Delivery Network**: Use CDNs for static assets to reduce latency and server load
+- **Debouncing and Throttling**: Use debouncing/throttling for frequently triggered events (scrolling, resizing, typing)
+- **Code Splitting**: Split code into smaller chunks; load only what's needed for current page/feature
+- **Tree Shaking**: Remove unused code through tree shaking in build process
+- **Avoid Blocking Operations**: Never block the main thread/event loop with CPU-intensive or synchronous I/O operations
+- **Optimize Critical Path**: Identify and optimize the critical rendering/execution path
+- **Regular Performance Reviews**: Include performance review in code reviews; prevent performance regressions
+- **Load Testing**: Perform load testing to understand system capacity and breaking points before going to production
+- **Resource Limits**: Set appropriate timeouts and resource limits to prevent resource exhaustion

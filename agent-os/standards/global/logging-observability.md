@@ -1,0 +1,26 @@
+## Logging and observability best practices
+
+- **Structured Logging**: Use structured logging with key-value pairs in JSON format for easy parsing and querying
+- **Log Levels**: Implement appropriate log levels (DEBUG, INFO, WARN, ERROR, FATAL) and use them consistently
+- **Context in Logs**: Include relevant context (timestamps, request IDs, user IDs, session IDs) with every log entry
+- **Never Log Secrets**: Never log sensitive data (passwords, tokens, API keys, PII, credit cards, SSNs)
+- **Correlation IDs**: Use correlation/trace IDs to track requests across services and system boundaries
+- **Meaningful Messages**: Write clear, descriptive log messages that help diagnose issues without reading code
+- **Log in Production**: Ensure logging works reliably in production; don't rely solely on development logging
+- **Log Retention**: Define log retention policies based on compliance requirements and storage costs
+- **Log Rotation**: Implement log rotation to prevent disk space exhaustion (daily, size-based, or both)
+- **Centralized Logging**: Send logs to centralized logging system (ELK Stack, Splunk, DataDog, CloudWatch, Loki)
+- **Error Tracking**: Use error tracking services (Sentry, Rollbar, Bugsnag) to aggregate and alert on errors
+- **Three Pillars**: Implement observability through logs (events), metrics (measurements), and traces (request flows)
+- **Metrics Collection**: Collect key metrics (response times, error rates, throughput, resource usage)
+- **Distributed Tracing**: Implement distributed tracing for microservices (OpenTelemetry, Jaeger, Zipkin)
+- **Health Checks**: Expose health check endpoints for monitoring system and dependency status
+- **Alerting**: Set up alerts for critical errors, performance degradation, and anomalies
+- **OpenTelemetry**: Use OpenTelemetry for vendor-neutral instrumentation and telemetry collection
+- **Sampling**: Use sampling for high-volume traces to control costs while maintaining visibility
+- **Dashboard Creation**: Create dashboards for key metrics and system health (Grafana, Kibana, DataDog)
+- **Development vs Production**: Use different log levels and verbosity for development (DEBUG) vs production (INFO/WARN)
+- **Performance Impact**: Minimize logging overhead; avoid excessive logging in hot code paths
+- **Log Search**: Ensure logs are searchable and filterable by relevant fields (timestamp, level, service, user)
+- **Audit Trails**: Log security-relevant events (logins, permission changes, data access) for audit compliance
+- **Timezone Consistency**: Use UTC for all timestamps to avoid timezone confusion

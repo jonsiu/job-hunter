@@ -1,0 +1,27 @@
+## Feature flags and progressive delivery
+
+- **Feature Flag System**: Use feature flag service (LaunchDarkly, Split.io, Unleash, Flagsmith) or build simple in-house system
+- **Flag Naming**: Use descriptive, prefixed names (e.g., `experiment_new_checkout`, `rollout_dark_mode`, `killswitch_recommendations`)
+- **Flag Types**: Distinguish between release flags (temporary), experiment flags (A/B tests), and operational flags (permanent)
+- **Default Values**: Define safe default values for when flag service is unavailable; fail open or fail closed appropriately
+- **Gradual Rollouts**: Roll out new features gradually (1% → 5% → 25% → 50% → 100%); monitor metrics at each stage
+- **User Segmentation**: Target flags by user attributes (user ID, email, plan, region, device type, browser)
+- **Kill Switches**: Implement kill switches for risky features; allow instant rollback without deployment
+- **A/B Testing**: Use flags for A/B experiments; integrate with analytics to measure variant performance
+- **Multivariate Tests**: Support testing multiple variants simultaneously; ensure statistical significance
+- **Flag Lifecycle**: Create → Test → Rollout → Monitor → Clean up; remove flags after full rollout (avoid flag debt)
+- **Flag Audit**: Regularly audit flags; remove stale flags (older than 90 days or fully rolled out)
+- **Flag Documentation**: Document purpose, owner, and expected removal date for each flag
+- **Local Override**: Allow developers to override flags locally for testing; support URL parameters or dev tools
+- **Flag Evaluation**: Evaluate flags server-side for security-sensitive features; client-side for UI changes
+- **Performance**: Cache flag values; minimize flag evaluation overhead; batch evaluations when possible
+- **Consistency**: Ensure consistent flag evaluation for same user across requests (sticky bucketing)
+- **Analytics Integration**: Track flag exposure events; analyze feature usage and conversion impact
+- **Rollback Strategy**: Plan rollback strategy before rollout; monitor error rates and key metrics
+- **Canary Releases**: Use flags with canary deployments; route small percentage to new version
+- **Blue-Green Deployment**: Use flags to switch traffic between blue and green environments
+- **Feature Entitlements**: Use flags to control access to premium features based on subscription plan
+- **Regional Rollouts**: Roll out features by region to manage time zones and localization
+- **Dependency Management**: Track dependencies between flags; avoid conflicting flags
+- **Testing with Flags**: Test all flag combinations; use synthetic monitoring to test flag variations
+- **Flag Security**: Protect flag configuration from unauthorized changes; audit flag changes; use role-based access

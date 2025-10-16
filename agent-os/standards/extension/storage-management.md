@@ -1,0 +1,22 @@
+## Storage management and quotas
+
+- **chrome.storage.sync**: 100KB total limit, 8KB per item, 512 items max; syncs across user's devices
+- **chrome.storage.local**: 5MB default limit (10MB with unlimitedStorage permission)
+- **Storage Quota**: Request unlimitedStorage permission for >5MB; use sparingly as it requires justification
+- **Item Size Limits**: Keep items under limits; split large data across multiple keys if needed
+- **Storage Events**: Listen to chrome.storage.onChanged to react to storage updates
+- **Cross-Context Sync**: storage.sync automatically syncs; ideal for user preferences and settings
+- **Storage.local Use Cases**: Use for large data, caches, or data that shouldn't sync (API responses, large datasets)
+- **Migration Strategy**: Plan for storage schema migrations; version your storage format
+- **Quota Exceeded**: Handle QUOTA_EXCEEDED_ERR gracefully; clear old data or prompt user
+- **IndexedDB**: Use IndexedDB for larger datasets; no 5MB limit, supports transactions and indexes
+- **IndexedDB Quota**: IndexedDB quota is based on available disk space; typically several GB
+- **Persistent Storage**: Request persistent storage to prevent eviction; requires user permission
+- **Storage Estimation**: Use navigator.storage.estimate() to check quota and usage
+- **Data Cleanup**: Implement cleanup strategy; delete old caches, expired data regularly
+- **Storage Structure**: Design efficient storage structure; use nested objects sparingly (each level counts toward size)
+- **Compression**: Compress large data before storing; use LZ-string or pako
+- **Encryption**: Encrypt sensitive data before storing; don't store secrets in plaintext
+- **Sync Conflicts**: Handle sync conflicts for storage.sync; last write wins by default
+- **Performance**: Batch storage operations; chrome.storage is asynchronous but batching improves performance
+- **Testing Storage**: Test storage limits in tests; simulate quota exceeded scenarios

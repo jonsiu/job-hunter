@@ -1,0 +1,27 @@
+## Cost optimization and FinOps
+
+- **Cost Awareness**: Make cost visibility part of development culture; understand cost implications of architectural decisions
+- **Resource Tagging**: Tag all cloud resources with project, environment, team, and cost center for cost attribution
+- **Right-Sizing**: Regularly review and optimize instance sizes, database capacity, and storage; avoid over-provisioning
+- **Auto-Scaling**: Implement auto-scaling for compute resources; scale down during low-traffic periods
+- **Reserved Instances**: Use reserved instances or savings plans for predictable workloads; can save 30-70%
+- **Spot Instances**: Use spot instances for fault-tolerant workloads (batch processing, CI/CD, development environments)
+- **Storage Optimization**: Implement lifecycle policies to move data to cheaper storage tiers; delete unused data
+- **Database Optimization**: Optimize queries to reduce database cost; use read replicas judiciously; consider serverless for variable load
+- **CDN Usage**: Use CDN to reduce bandwidth costs; cache static assets; optimize image and video delivery
+- **API Cost Management**: Monitor third-party API usage; implement caching and rate limiting to reduce API calls
+- **Logging Costs**: Be selective about log retention; archive old logs to cheaper storage; avoid logging sensitive data
+- **Monitoring Granularity**: Balance monitoring granularity with cost; not everything needs 1-second metrics
+- **Idle Resource Detection**: Identify and shut down idle resources (dev environments, test instances, unused databases)
+- **Cost Budgets**: Set budgets and alerts for cloud spending; get notified when approaching limits
+- **Cost Allocation**: Implement showback or chargeback to attribute costs to teams or products
+- **Environment Management**: Shut down non-production environments outside business hours; use ephemeral environments
+- **Serverless Optimization**: For serverless, optimize function memory allocation and execution time to reduce cost
+- **Data Transfer**: Minimize cross-region and cross-AZ data transfer; keep compute and data in same region
+- **Garbage Collection**: Implement automated cleanup of old snapshots, AMIs, volumes, and test data
+- **Cost Forecasting**: Project future costs based on growth; plan for scaling before hitting budget limits
+- **Vendor Negotiation**: For large spending, negotiate enterprise agreements with vendors for better rates
+- **Open Source Alternatives**: Consider open source alternatives to expensive proprietary software
+- **Egress Optimization**: Minimize data egress from cloud (most expensive); use CDN or regional caching
+- **Multi-Cloud Strategy**: Avoid unnecessary multi-cloud; vendor switching costs often exceed savings
+- **FinOps Team**: For larger organizations, establish FinOps practice with finance and engineering collaboration

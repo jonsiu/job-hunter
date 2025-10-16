@@ -1,0 +1,25 @@
+## Local extension development setup
+
+- **Load Unpacked**: Use "Load unpacked" in chrome://extensions to load extension from source directory
+- **Developer Mode**: Enable Developer mode in chrome://extensions to access load unpacked and reload
+- **Auto Reload**: Use extension auto-reload tools; reload extension on file changes
+- **Build Watch**: Run build in watch mode; automatically rebuild on source changes
+- **Hot Module Replacement**: Use HMR for popup and options page; instant updates without reload
+- **Content Script Reload**: Content scripts require page reload after extension reload; tab refresh needed
+- **Service Worker Restart**: Service worker restarts on extension reload; test cold start behavior
+- **Directory Structure**: Keep source and build separate; load build directory as unpacked extension
+- **Source Maps**: Generate source maps in development; debug TypeScript/source code directly
+- **TypeScript Support**: Set up TypeScript with fast incremental builds; use ts-node for build scripts
+- **Linting**: Run ESLint on save; catch errors early
+- **Formatting**: Auto-format with Prettier on save; consistent code style
+- **Testing**: Easy to run tests locally; use Jest or Vitest for unit tests
+- **E2E Testing**: Use Puppeteer or Playwright for E2E extension testing
+- **Multiple Profiles**: Use Chrome profiles for testing different user states; isolate extension data
+- **Browser Versions**: Test in stable, beta, and canary Chrome; catch breaking changes early
+- **Cross-Browser Testing**: Load extension in Firefox and Edge; catch compatibility issues
+- **Mock APIs**: Mock external APIs for offline development; use MSW or similar
+- **Environment Variables**: Use different .env files for dev, staging, production; webpack DefinePlugin injects variables
+- **Debugging Setup**: Configure VSCode debugger for extension contexts; launch.json for debugging
+- **Quick Iteration**: Optimize for fast edit-reload-test cycle; under 5 seconds ideal
+- **Troubleshooting**: Document common issues (permission errors, CSP violations, missing resources)
+- **Extension ID**: Use key in manifest.json for consistent extension ID across reloads; needed for OAuth

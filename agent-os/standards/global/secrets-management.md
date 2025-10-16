@@ -1,0 +1,22 @@
+## Secrets and credentials management
+
+- **Never Hardcode Secrets**: Never hardcode API keys, tokens, passwords, or credentials in source code
+- **Environment Variables**: Use environment variables for configuration and secrets (loaded from .env files in development)
+- **Exclude from Version Control**: Add .env, secrets files, and credential files to .gitignore; never commit them
+- **Secret Management Tools**: Use dedicated secret management services (AWS Secrets Manager, Azure Key Vault, HashiCorp Vault, Doppler)
+- **OS Credential Stores**: Leverage OS-provided credential storage (macOS Keychain, Windows Credential Manager, Linux Secret Service)
+- **Encryption at Rest**: Encrypt secrets when storing them on disk or in databases
+- **Secret Rotation**: Implement regular secret rotation policies; change credentials on a schedule
+- **Token Expiration**: Use short-lived tokens when possible; implement automatic refresh mechanisms
+- **Access Control**: Restrict secret access to only the services and users that need them (principle of least privilege)
+- **Audit Logging**: Log all secret access and changes for security auditing and compliance
+- **Secret Masking**: Mask secrets in logs, error messages, and debug output (show only last 4 characters or use *****)
+- **Separate Environments**: Use different secrets for development, staging, and production environments
+- **Secret Validation**: Validate secrets format and permissions before using them
+- **Revocation Process**: Have a clear process to quickly revoke compromised credentials
+- **Team Access**: Use team secret management tools; avoid sharing secrets via Slack, email, or chat
+- **Local Development**: Provide .env.example file with placeholder values; document required secrets in README
+- **CI/CD Secrets**: Use CI/CD platform secret management (GitHub Secrets, GitLab CI/CD variables, CircleCI contexts)
+- **Emergency Procedures**: Document emergency procedures for handling leaked or compromised secrets
+- **Regular Audits**: Periodically audit which secrets exist, who has access, and remove unused ones
+- **MFA for Secret Access**: Require multi-factor authentication for accessing production secrets
