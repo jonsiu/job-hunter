@@ -1,0 +1,24 @@
+## Dependency management best practices
+
+- **Use Lockfiles**: Always commit lockfiles (package-lock.json, yarn.lock, Cargo.lock, Gemfile.lock, poetry.lock) to ensure reproducible builds
+- **Minimize Dependencies**: Only add dependencies that are truly necessary; each dependency increases attack surface and maintenance burden
+- **Pin Versions**: Use specific version ranges or exact versions to prevent unexpected breaking changes
+- **Regular Updates**: Regularly update dependencies to get security patches, bug fixes, and performance improvements
+- **Security Scanning**: Use automated tools to scan for known vulnerabilities (npm audit, cargo audit, Snyk, Dependabot, Renovate)
+- **Audit Before Adding**: Research dependencies before adding them (maintenance status, popularity, security history, license)
+- **Remove Unused**: Periodically audit and remove dependencies that are no longer used
+- **Direct vs Transitive**: Be aware of transitive dependencies; your direct dependencies pull in many others
+- **License Compliance**: Review dependency licenses to ensure compliance with your project's license and legal requirements
+- **Document Major Dependencies**: Document why major dependencies were chosen and what alternatives were considered
+- **Automated Updates**: Use automated tools for dependency updates (Dependabot, Renovate, Greenkeeper)
+- **Test After Updates**: Run full test suite after updating dependencies to catch breaking changes
+- **Security Advisories**: Subscribe to security advisories for your language ecosystem and critical dependencies
+- **Monorepo Considerations**: In monorepos, share dependency versions across projects to reduce duplication
+- **Dev vs Production**: Separate development dependencies from production dependencies
+- **Bundle Size Impact**: For client-side projects, consider the bundle size impact of each dependency
+- **Alternative Solutions**: Before adding a dependency, consider if the functionality can be implemented simply in-house
+- **Dependency Count Metrics**: Monitor total dependency count over time; growth should be intentional
+- **Update Strategy**: Have a strategy for updates (automatic for patches, manual for majors, staged rollouts for critical systems)
+- **Rollback Plan**: Be prepared to quickly rollback dependency updates if issues are discovered in production
+- **Verification**: Verify package integrity using checksums or signature verification when available
+- **Private Registries**: For proprietary code, use private package registries (npm Enterprise, Artifactory, CodeArtifact)

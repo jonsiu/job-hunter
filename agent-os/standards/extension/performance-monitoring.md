@@ -1,0 +1,24 @@
+## Extension performance monitoring
+
+- **Performance Impact**: Monitor extension's impact on browser performance; minimize CPU and memory usage
+- **Content Script Performance**: Measure content script execution time; aim for <50ms initialization
+- **Page Load Impact**: Minimize impact on page load; defer non-critical work until after page load
+- **run_at Timing**: Use run_at: document_idle for non-critical scripts; document_start only when necessary
+- **Memory Leaks**: Monitor for memory leaks; long-running extensions can accumulate significant memory
+- **Memory Profiling**: Use Chrome DevTools Memory profiler; take heap snapshots regularly
+- **Event Listeners**: Remove event listeners when done; prevent memory leaks from orphaned listeners
+- **DOM References**: Don't hold references to removed DOM nodes; leads to memory leaks
+- **Service Worker Memory**: Service worker terminates to free memory; don't worry about service worker memory in long term
+- **CPU Usage**: Monitor CPU usage; background processing shouldn't spin CPU constantly
+- **Throttling**: Throttle expensive operations (search, animation, API calls); use debounce and throttle
+- **Performance API**: Use Performance API to measure critical operations; track timing for key features
+- **Long Tasks**: Avoid long tasks (>50ms); break into smaller chunks or use Web Workers
+- **Rendering Performance**: Minimize layout thrashing; batch DOM reads and writes
+- **Background Pages vs Service Workers**: Service workers are more efficient; migrate from background pages (MV2)
+- **Lazy Loading**: Lazy load features; don't initialize everything on startup
+- **Code Splitting**: Split code into modules; load only what's needed for current context
+- **Bundle Size**: Minimize bundle size; smaller bundles load faster and use less memory
+- **User Metrics**: Collect anonymous performance metrics; understand real-world performance
+- **Benchmarking**: Benchmark critical paths; track performance over versions
+- **Chrome Flags**: Test with chrome://flags/#extension-performance-telemetry enabled
+- **Lighthouse**: Run Lighthouse on pages with extension; measure extension's impact

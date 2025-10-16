@@ -1,0 +1,28 @@
+## Compliance and legal requirements
+
+- **Privacy by Design**: Implement privacy considerations from the start; minimize data collection
+- **Data Classification**: Classify data by sensitivity (public, internal, confidential, restricted, PII)
+- **GDPR Compliance**: For EU users, implement right to access, rectification, erasure, portability, restriction
+- **CCPA Compliance**: For California users, implement right to know, delete, opt-out of data sale
+- **Consent Management**: Obtain explicit consent for data processing; allow users to withdraw consent
+- **Privacy Policy**: Provide clear privacy policy explaining data collection, usage, sharing, and retention
+- **Terms of Service**: Define terms of use, acceptable use policy, and user responsibilities
+- **Cookie Consent**: Implement cookie banner for EU users; categorize cookies (essential, functional, analytics, marketing)
+- **Data Retention**: Define and implement data retention policies; automatically delete data after retention period
+- **Data Deletion**: Implement user data deletion on request; verify deletion across all systems including backups
+- **Data Portability**: Allow users to export their data in machine-readable format (JSON, CSV)
+- **Breach Notification**: Establish process for detecting, reporting, and notifying users of data breaches (72 hours for GDPR)
+- **Data Processing Agreement**: For B2B SaaS, provide DPA for customers who are data controllers
+- **Subprocessor List**: Maintain list of third-party subprocessors; notify customers of changes
+- **Age Verification**: Implement age gates for COPPA compliance (under 13 in US requires parental consent)
+- **Audit Logging**: Log all access to sensitive data; retain audit logs for compliance period (typically 7 years)
+- **Right to Rectification**: Allow users to correct inaccurate personal data
+- **Right to Restriction**: Allow users to restrict processing of their data under certain conditions
+- **Legitimate Interest**: Document legitimate interest assessments (GDPR Article 6.1.f)
+- **Cross-Border Transfers**: Use Standard Contractual Clauses or adequacy decisions for data transfers outside EU
+- **Data Minimization**: Collect only data necessary for stated purpose; avoid "just in case" data collection
+- **Purpose Limitation**: Use data only for stated purposes; obtain new consent for new purposes
+- **Security Safeguards**: Implement appropriate technical and organizational measures (encryption, access controls)
+- **Third-Party Audits**: Conduct regular security audits; obtain SOC 2 Type II or ISO 27001 for enterprise customers
+- **Accessibility Compliance**: Meet ADA and Section 508 requirements for government and education customers
+- **Industry-Specific**: Comply with industry regulations (HIPAA for health, PCI-DSS for payments, FERPA for education)

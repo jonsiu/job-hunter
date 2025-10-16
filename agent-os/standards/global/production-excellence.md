@@ -1,0 +1,27 @@
+## Production excellence and operational maturity
+
+- **Incident Management**: Define incident severity levels (P0-P4); establish on-call rotation; use incident management tool
+- **Incident Response**: Follow incident response process: detect → triage → mitigate → resolve → postmortem
+- **Communication During Incidents**: Establish communication channels (Slack, status page); provide regular updates to stakeholders
+- **Status Page**: Maintain public status page for customer-facing services (Statuspage.io, Atlassian Statuspage)
+- **On-Call Rotation**: Rotate on-call responsibilities; compensate for on-call time; limit consecutive on-call weeks
+- **Runbooks**: Create runbooks for common issues and procedures; link alerts to relevant runbooks
+- **Playbooks**: Develop playbooks for incident types (database outage, DDoS attack, data breach)
+- **Escalation Path**: Define clear escalation path; know who to call for critical issues
+- **Blameless Culture**: Foster blameless culture; focus on systems and processes, not individuals
+- **Postmortems**: Conduct postmortems after incidents; identify root cause, contributing factors, and action items
+- **Postmortem Template**: Use consistent postmortem template (timeline, impact, root cause, action items)
+- **Postmortem Distribution**: Share postmortems across organization; learn from others' incidents
+- **Action Item Tracking**: Track action items from postmortems to completion; measure time to implement
+- **Chaos Engineering**: Practice chaos engineering to validate system resilience; use Chaos Monkey, Gremlin, or LitmusChaos
+- **Game Days**: Conduct game days to practice incident response; simulate outages and test runbooks
+- **Disaster Recovery**: Document disaster recovery plan; define RTO (recovery time objective) and RPO (recovery point objective)
+- **Backup and Restore**: Regularly test backup and restore procedures; automate backups; store backups in different region
+- **Capacity Planning**: Monitor resource utilization; forecast capacity needs; provision ahead of demand
+- **Performance Budgets**: Set performance budgets for page load time, API latency, database queries
+- **Deployment Strategy**: Use blue-green, canary, or rolling deployments; automate rollback on errors
+- **Deployment Frequency**: Measure deployment frequency; frequent small deployments reduce risk
+- **Lead Time**: Measure lead time from commit to production; aim for hours not weeks
+- **Change Failure Rate**: Track percentage of deployments that cause incidents; aim for < 15%
+- **Mean Time to Recovery (MTTR)**: Measure MTTR; aim to reduce over time through automation and better observability
+- **Operational Reviews**: Conduct regular operational reviews; discuss incidents, trends, and improvements

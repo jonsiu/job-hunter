@@ -1,0 +1,28 @@
+## Platform engineering and internal developer platforms
+
+- **Platform as Product**: Treat internal platform as product with users (developers); gather feedback and iterate
+- **Golden Paths**: Create golden paths (paved roads) for common tasks; make right way the easy way
+- **Self-Service**: Enable self-service for developers; reduce dependency on platform team for common tasks
+- **Developer Portal**: Build developer portal with documentation, getting started guides, API catalog, runbooks
+- **Service Catalog**: Maintain catalog of available services, libraries, and tools; include ownership and SLAs
+- **Service Templates**: Provide templates for new services; include boilerplate code, CI/CD, monitoring, and best practices
+- **Scaffolding Tools**: Build scaffolding CLI or web UI to generate new projects from templates
+- **Infrastructure as Code**: Standardize on IaC tool (Terraform, Pulumi, CloudFormation); provide reusable modules
+- **Environment Provisioning**: Automate environment provisioning; enable developers to create dev/test environments
+- **CI/CD Pipeline**: Provide standardized CI/CD pipelines; make it easy to set up for new services
+- **Deployment Automation**: Automate deployments; use GitOps (ArgoCD, Flux) for declarative deployments
+- **Observability Stack**: Provide centralized observability (logging, metrics, tracing); automatic instrumentation
+- **Secret Management**: Centralize secret management (HashiCorp Vault, AWS Secrets Manager); automate secret rotation
+- **Service Mesh**: For microservices, consider service mesh (Istio, Linkerd) for traffic management, security, observability
+- **API Gateway**: Provide API gateway for routing, authentication, rate limiting, and API composition
+- **Database Provisioning**: Automate database provisioning; provide managed database options
+- **Developer Environments**: Provide cloud-based developer environments (GitHub Codespaces, Gitpod) or local dev containers
+- **Inner Loop Optimization**: Optimize inner dev loop (code → test → debug); aim for seconds not minutes
+- **Outer Loop Automation**: Automate outer loop (commit → build → deploy); fully automated CI/CD
+- **Platform Documentation**: Maintain comprehensive platform documentation; include architecture diagrams, tutorials, FAQs
+- **Platform SLOs**: Define SLOs for platform services; treat platform reliability as critical
+- **Platform Metrics**: Track platform metrics (time to first deployment, build success rate, deployment frequency)
+- **Developer Satisfaction**: Measure developer satisfaction; use surveys (NPS, DORA metrics)
+- **Office Hours**: Hold regular office hours for platform team; answer questions and gather feedback
+- **Platform Champions**: Identify platform champions in product teams; early adopters and advocates
+- **Standardization vs Flexibility**: Balance standardization with team autonomy; allow escape hatches for special cases

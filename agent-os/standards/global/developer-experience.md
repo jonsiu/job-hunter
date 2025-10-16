@@ -1,0 +1,28 @@
+## Developer experience (DX) fundamentals
+
+- **First-Run Experience**: Optimize "clone to running" time; aim for under 5 minutes for new developers
+- **Setup Documentation**: Provide comprehensive README with prerequisites, installation steps, and common issues
+- **Automated Setup**: Use setup scripts to automate dependency installation, database initialization, and configuration
+- **Environment Configuration**: Use .env.example or .env.template; document all environment variables with descriptions
+- **Docker Compose**: Provide docker-compose.yml for local development with all required services (database, cache, etc.)
+- **Hot Reload**: Implement hot module replacement or live reload for rapid iteration; restart should be seconds not minutes
+- **Fast Feedback**: Optimize build and test times; use incremental builds and test parallelization
+- **IDE Integration**: Document IDE setup (VSCode, IntelliJ, WebStorm); provide workspace settings and recommended extensions
+- **Debugging Setup**: Configure debugger settings; document breakpoint debugging workflow for local development
+- **Development Mode**: Implement development mode with helpful errors, warnings, and debug information
+- **Error Messages**: Provide actionable error messages with suggestions for resolution; link to documentation
+- **Logging**: Use structured logging with appropriate log levels; make it easy to filter and search logs
+- **Mock Data**: Provide seed data or fixtures for local development; include realistic test data
+- **API Mocking**: Support API mocking for frontend development; use tools like MSW, Mirage JS, or JSON Server
+- **Testing Workflow**: Make it easy to run tests locally; support watch mode for TDD; show coverage
+- **Linting and Formatting**: Auto-format on save; run linters pre-commit; consistent code style across team
+- **Pre-commit Hooks**: Use husky or lefthook for pre-commit linting, formatting, and type checking
+- **Branch Workflow**: Document Git workflow (feature branches, PR process, commit conventions)
+- **Code Review**: Establish code review guidelines; use PR templates; automate checks in CI
+- **Documentation**: Keep docs close to code; use inline documentation; maintain architecture decision records (ADRs)
+- **Onboarding Checklist**: Provide new developer checklist; track common setup issues and solutions
+- **Troubleshooting Guide**: Document common issues and solutions; maintain FAQ for development environment
+- **Performance Profiling**: Provide tools and documentation for local performance profiling and optimization
+- **Feature Flags**: Use feature flags for work-in-progress features; allow local override for development
+- **Dependency Management**: Keep dependencies up-to-date; use Dependabot or Renovate; document upgrade process
+- **Local HTTPS**: Support local HTTPS development when needed (for OAuth, secure cookies, etc.)

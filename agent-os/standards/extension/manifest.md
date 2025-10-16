@@ -1,0 +1,33 @@
+## Browser extension manifest configuration
+
+- **Manifest Version**: Use Manifest V3 for new extensions; V2 deprecated June 2024, removed Jan 2025
+- **Minimum Required Fields**: name, version, manifest_version, description, icons
+- **Permissions Strategy**: Request minimum necessary permissions; justify each one; excessive permissions reduce user trust
+- **Host Permissions**: Use `host_permissions` field (V3) for content script access to domains
+- **Host Patterns**: Use specific patterns; avoid <all_urls> unless absolutely necessary; explain in privacy policy
+- **Optional Permissions**: Use `optional_permissions` for features users can enable later; reduces initial permission request
+- **Permission Warnings**: Understand permission warnings shown to users; group permissions strategically
+- **Icons**: Provide 16x16, 48x48, 128x128 PNG icons with transparency; 128x128 used in Chrome Web Store
+- **Action vs Page Action**: Use `action` (V3) for toolbar icon; page_action removed in V3
+- **Default Popup**: Specify `default_popup` in action for popup UI; omit if using programmatic popup
+- **Default Icon**: Provide action icon in multiple sizes; 16px and 32px for different DPI displays
+- **Service Worker**: Use `background.service_worker` (V3) instead of persistent background pages
+- **Service Worker Type**: Must be ES module if using import/export; set `"type": "module"` in background
+- **Content Scripts**: Define in `content_scripts` array; specify matches, js, css, run_at, all_frames
+- **run_at Options**: document_start (before DOM), document_end (after DOM), document_idle (after load); use idle unless critical
+- **match_patterns**: Use match patterns to target specific sites; more specific = better performance
+- **exclude_matches**: Exclude patterns where content script shouldn't run; useful for preventing conflicts
+- **Content Security Policy**: Define strict CSP in `content_security_policy.extension_pages`; V3 requires object-src, script-src
+- **CSP for Sandbox**: Separate CSP for sandboxed pages in `content_security_policy.sandbox`
+- **Web Accessible Resources**: Only expose necessary resources; V3 requires `resources` array with `matches` for security
+- **Declarative Net Request**: Use `declarative_net_request` for request modification; replaces blocking webRequest in V3
+- **Update URL**: Specify `update_url` if self-hosting updates; Chrome Web Store handles this automatically
+- **Version Numbers**: Use semantic versioning (1.2.3); version_name for display version
+- **Cross-Browser Support**: Test manifest compatibility across Chrome, Firefox, Edge, Safari
+- **Browser Specific Keys**: Use `browser_specific_settings` for Firefox; specify min Firefox version and extension ID
+- **Externally Connectable**: Limit external messaging to specific domains only; prevent unauthorized website communication
+- **Commands**: Define keyboard shortcuts in `commands`; maximum 4 suggested shortcuts
+- **Options Page**: Specify `options_page` or `options_ui` for settings page
+- **Omnibox**: Use `omnibox` keyword for address bar integration
+- **Side Panel**: V3 supports `side_panel` for persistent side UI (Chrome 114+)
+- **Manifest Validation**: Validate manifest with extension developer tools; errors prevent loading

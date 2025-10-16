@@ -1,0 +1,36 @@
+## Extension security best practices
+
+- **Content Security Policy**: Define strict CSP in manifest; V3 disallows unsafe-eval and unsafe-inline by default
+- **CSP Restrictions**: V3 requires script-src 'self'; can't load remote scripts; bundle all JS
+- **WASM Allowed**: WebAssembly allowed in V3 CSP; use 'wasm-unsafe-eval' if needed
+- **Input Validation**: Validate and sanitize ALL external inputs from web pages, APIs, and user input
+- **XSS Prevention**: Never use `innerHTML` with untrusted content; use `textContent`, `innerText`, or DOMPurify
+- **DOM Sanitization**: Use DOMPurify or Sanitizer API for sanitizing HTML from untrusted sources
+- **Code Injection**: Never execute untrusted code with `eval()`, `Function()`, `new Function()`, or `setTimeout(string)`
+- **Dynamic Imports**: Avoid dynamic imports of untrusted URLs; only import from extension resources
+- **Message Sender Verification**: Always verify `sender.id` matches extension ID; verify `sender.url` for expected origins
+- **Sender Tab Verification**: Check `sender.tab.url` before trusting messages from content scripts
+- **Message Type Validation**: Validate message structure and type; use schema validation for complex messages
+- **HTTPS Only**: Communicate only with HTTPS endpoints; no HTTP API calls (use https:// in host_permissions)
+- **Secret Management**: Never hardcode API keys or secrets; use environment variables at build time or secure storage
+- **API Key Rotation**: Rotate API keys regularly; detect and revoke compromised keys
+- **Origin Validation**: Validate origins when receiving postMessage events; use allowlist of trusted origins
+- **Clickjacking Protection**: Implement CSP frame-ancestors for extension pages; prevent embedding in untrusted iframes
+- **Data Exposure**: Don't expose sensitive data through web_accessible_resources; attackers can access these
+- **Resource Matching**: Use specific matches in web_accessible_resources; don't expose to <all_urls>
+- **Permissions Audit**: Regularly audit requested permissions; remove unused permissions
+- **Permission Justification**: Justify each permission in privacy policy and Chrome Web Store description
+- **Update Mechanism**: Keep extension updated; use Chrome Web Store auto-updates; monitor security advisories
+- **Third-Party Libraries**: Audit dependencies for vulnerabilities; use tools like npm audit, Snyk
+- **Library Versions**: Keep libraries updated; subscribe to security advisories for dependencies
+- **Subresource Integrity**: Use SRI for any external resources (if allowed by CSP)
+- **User Data Protection**: Encrypt sensitive user data before storing; use Web Crypto API
+- **Encryption Keys**: Never store encryption keys in extension storage; derive from user password or use browser-managed keys
+- **Audit Logging**: Log security-relevant events (auth failures, permission changes, data exports)
+- **Security Headers**: Set appropriate security headers for extension-hosted pages (X-Content-Type-Options, X-Frame-Options)
+- **Secure Defaults**: Use secure defaults for all settings; require explicit opt-in for less secure options
+- **Extension ID**: Don't rely on extension ID for security; it can be spoofed during development
+- **Content Script Isolation**: Content scripts run in isolated world; don't share DOM with page scripts
+- **postMessage Security**: When using window.postMessage, always specify targetOrigin; never use '*'
+- **OAuth Security**: For OAuth flows, use PKCE; validate state parameter; use secure redirect URIs
+- **Manifest Permissions**: Understand security implications of each permission; avoid overly broad permissions

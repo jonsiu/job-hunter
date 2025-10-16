@@ -1,0 +1,51 @@
+## CI/CD best practices for all software
+
+- **Version Control Everything**: Store all code, configuration, scripts, infrastructure definitions, and pipeline configs in version control
+- **Commit Frequently**: Make small, incremental commits to keep changes manageable and easier to integrate
+- **Fast Feedback Loops**: Optimize pipelines to fail fast and provide quick feedback to developers (target < 10 minutes for basic checks)
+- **Automate Everything**: Automate builds, tests, deployments, and rollbacks; eliminate manual steps that introduce errors and delays
+- **Build Once, Deploy Many**: Build artifacts once and promote the same artifact through all environments (dev → staging → prod)
+- **Immutable Artifacts**: Never modify build artifacts after creation; rebuild from source if changes are needed
+- **Parallel Execution**: Run independent tasks (tests, linting, security scans) in parallel to reduce pipeline duration
+- **Fail Fast**: Run fastest and most critical checks first; stop pipeline immediately on critical failures
+- **Idempotent Pipelines**: Ensure pipeline steps can run multiple times with the same results without side effects
+- **Infrastructure as Code**: Define all infrastructure (IaC) using version-controlled code (Terraform, CloudFormation, Pulumi)
+- **Environment Parity**: Keep dev, staging, and production environments as similar as possible to catch issues early
+- **Automated Testing**: Implement comprehensive test suite (unit, integration, E2E); maintain minimum coverage thresholds
+- **Test in Production-Like**: Run tests in environments that mirror production configuration, data volumes, and dependencies
+- **Security Scanning**: Integrate automated security checks (SAST, DAST, dependency scanning, container scanning) into every pipeline run
+- **Secret Management**: Never hardcode secrets; use dedicated secret managers (Vault, AWS Secrets Manager, GitHub Secrets)
+- **Secrets Rotation**: Rotate secrets regularly and update them through automated processes, not manual intervention
+- **Container Scanning**: Scan container images for vulnerabilities before deployment; fail builds on high-severity issues
+- **Dependency Scanning**: Automatically check dependencies for known vulnerabilities (CVEs) on every build
+- **Code Quality Gates**: Enforce code quality standards (linting, complexity metrics, code coverage) as pipeline gates
+- **Branch Protection**: Require passing CI checks and code reviews before merging to main/production branches
+- **Deployment Strategies**: Use safe deployment patterns (blue-green, canary, rolling) to minimize risk
+- **Rollback Capability**: Always maintain ability to quickly rollback to previous version; test rollback procedures regularly
+- **Feature Flags**: Use feature flags to decouple deployment from release; enable gradual rollouts and quick disables
+- **Monitoring & Alerts**: Monitor pipeline health, execution time, failure rates; alert on anomalies and trends
+- **Deployment Verification**: Implement automated smoke tests and health checks after each deployment
+- **Audit Logging**: Log all pipeline executions, deployments, configuration changes; maintain immutable audit trail
+- **Environment Variables**: Use environment-specific variables; never commit environment-specific values to source control
+- **Artifact Storage**: Store build artifacts in dedicated artifact repositories (Artifactory, Nexus, container registries)
+- **Cache Dependencies**: Cache dependencies and build outputs to speed up subsequent builds
+- **Resource Limits**: Set appropriate resource limits (CPU, memory, timeout) for pipeline jobs to prevent runaway processes
+- **Pipeline as Code**: Define CI/CD pipelines as code (Jenkinsfile, .github/workflows, .gitlab-ci.yml) in the repository
+- **Self-Service Deployments**: Enable developers to deploy their own changes through automated pipelines with appropriate guardrails
+- **Database Migrations**: Automate and version database migrations; ensure backward compatibility during deployments
+- **Deployment Windows**: Define and enforce deployment windows for production; avoid deployments during peak hours or weekends
+- **Change Documentation**: Automatically generate and maintain changelogs and release notes from commit history
+- **Metrics & KPIs**: Track DORA metrics (deployment frequency, lead time, MTTR, change failure rate) to measure effectiveness
+- **Progressive Delivery**: Gradually roll out changes to subsets of users; monitor metrics before full rollout
+- **Approval Gates**: Require manual approval for production deployments in regulated or high-risk environments
+- **Notification Strategy**: Send targeted notifications for pipeline events (failures, approvals needed) to relevant teams
+- **Dependency Updates**: Automate dependency updates (Dependabot, Renovate) with automated testing before merge
+- **Pipeline Optimization**: Regularly review and optimize pipeline performance; remove redundant steps
+- **Disaster Recovery**: Test and document disaster recovery procedures for CI/CD infrastructure itself
+- **Multi-Environment**: Support deployment to multiple environments with environment-specific configuration
+- **Compliance Checks**: Integrate compliance and policy checks (OPA, Sentinel) into deployment pipeline
+- **Cost Monitoring**: Monitor and optimize CI/CD infrastructure costs; rightsize compute resources
+- **Documentation**: Document pipeline architecture, deployment processes, and troubleshooting procedures
+- **Pipeline Testing**: Test pipeline changes in isolated environments before applying to production pipelines
+- **Cleanup Automation**: Automatically clean up old artifacts, test environments, and temporary resources
+- **Zero-Downtime**: Design deployments for zero downtime using load balancers, health checks, and graceful shutdowns

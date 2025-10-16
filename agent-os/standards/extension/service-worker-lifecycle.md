@@ -1,0 +1,22 @@
+## Service worker lifecycle in Manifest V3
+
+- **Installation**: Service worker installs on extension install or update; use install event for initialization
+- **Activation**: Service worker activates after installation; use activate event for cleanup and migrations
+- **Event-Driven**: Service worker runs in response to events; terminates when idle to save resources
+- **Termination**: Service worker terminates after 30 seconds of inactivity; expect frequent termination
+- **Restart**: Service worker restarts on next event; must handle cold starts gracefully
+- **State Persistence**: Don't rely on global state; use chrome.storage for persistent state
+- **Timers**: Use chrome.alarms instead of setTimeout/setInterval; timers don't survive termination
+- **Alarm Precision**: Alarms fire approximately at scheduled time; not precise for sub-minute timing
+- **Message Handling**: Handle messages from content scripts and popups; chrome.runtime.onMessage
+- **Long-Running Tasks**: Break long tasks into smaller chunks; service worker may terminate mid-task
+- **fetch Event**: Service worker can intercept network requests; use for caching or modification
+- **updateViaCache**: Control service worker caching with updateViaCache in manifest
+- **Skip Waiting**: Use skipWaiting() to activate new service worker immediately; careful with breaking changes
+- **Clients.claim()**: Use clients.claim() to take control of pages without reload
+- **Registration**: Extension service workers auto-register; no manual registration needed
+- **Debugging**: Use chrome://extensions with "Service Worker" link to inspect
+- **Error Recovery**: Service worker errors can cause extension to stop working; implement robust error handling
+- **Update Strategy**: Test service worker updates carefully; old version may be running during update
+- **Versioning**: Use versioning in stored data; handle migrations between service worker versions
+- **Resource Loading**: Load resources using chrome.runtime.getURL(); don't use relative paths

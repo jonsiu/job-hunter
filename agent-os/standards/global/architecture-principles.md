@@ -1,0 +1,27 @@
+## Software architecture principles
+
+- **Single Responsibility Principle (SRP)**: Each module, class, or function should have one well-defined responsibility and reason to change
+- **Open/Closed Principle (OCP)**: Software entities should be open for extension but closed for modification; add new features without changing existing code
+- **Liskov Substitution Principle (LSP)**: Subtypes must be substitutable for their base types without breaking correctness
+- **Interface Segregation Principle (ISP)**: Clients should not be forced to depend on interfaces they don't use; prefer small, focused interfaces
+- **Dependency Inversion Principle (DIP)**: Depend on abstractions, not concretions; high-level modules shouldn't depend on low-level modules
+- **Separation of Concerns**: Separate code into distinct sections where each section addresses a separate concern
+- **Modularity**: Build software from independent, interchangeable modules with well-defined interfaces
+- **Encapsulation**: Hide internal implementation details; expose only necessary public interfaces
+- **Loose Coupling**: Minimize dependencies between modules; changes in one module should minimally impact others
+- **High Cohesion**: Keep related functionality together; each module should have a focused purpose
+- **DRY (Don't Repeat Yourself)**: Avoid duplicating code or logic; extract common functionality into reusable components
+- **KISS (Keep It Simple, Stupid)**: Favor simple solutions over complex ones; complexity should be justified by clear benefits
+- **YAGNI (You Aren't Gonna Need It)**: Don't implement features until they're actually needed; avoid speculative development
+- **Composition Over Inheritance**: Prefer composition and interfaces over inheritance hierarchies for flexibility
+- **Design for Testability**: Structure code to be easily testable; this naturally leads to better design
+- **Dependency Injection**: Pass dependencies as parameters rather than creating them internally; improves testability and flexibility
+- **Immutability**: Prefer immutable data structures where possible; they're easier to reason about and thread-safe
+- **Fail Fast**: Detect and report errors as early as possible rather than allowing invalid states to propagate
+- **Explicit Over Implicit**: Make behavior explicit and obvious rather than relying on implicit conventions or magic
+- **Convention Over Configuration**: Prefer sensible defaults and conventions over extensive configuration when appropriate
+- **Avoid Premature Optimization**: Don't optimize before profiling; optimize only when you've identified actual bottlenecks
+- **Design by Contract**: Define clear preconditions, postconditions, and invariants for functions and modules
+- **Law of Demeter**: A module should only talk to its immediate friends; avoid chaining through multiple objects
+- **Command-Query Separation**: Methods should either change state (commands) or return data (queries), not both
+- **Single Source of Truth**: Each piece of knowledge should have one authoritative representation in the system

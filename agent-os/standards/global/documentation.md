@@ -1,0 +1,27 @@
+## Documentation best practices
+
+- **README.md Required**: Every project must have a README.md with overview, setup instructions, usage examples, and contribution guidelines
+- **README Structure**: Include sections: Project name/description, Prerequisites, Installation, Usage, Configuration, Contributing, License, Contact
+- **Quick Start**: Provide a quick start section that gets users from zero to working example in minutes
+- **CHANGELOG.md**: Maintain a CHANGELOG.md following keepachangelog.com format to track notable changes between versions
+- **Changelog Format**: Organize by version and date; categorize changes as Added, Changed, Deprecated, Removed, Fixed, Security
+- **List Breaking Changes**: Always explicitly call out breaking changes, deprecations, and removals in changelog and release notes
+- **Docs as Code**: Store documentation alongside code in version control; review docs in pull requests like code
+- **Keep Docs Updated**: Update documentation whenever code changes; stale docs are worse than no docs
+- **Architecture Decisions**: Document important architecture decisions in ADRs (Architecture Decision Records)
+- **API Documentation**: Document all public APIs using standard formats (JSDoc, docstrings, Swagger/OpenAPI, API Blueprint)
+- **Code Comments**: Explain WHY code does something, not WHAT it does; the code itself should be self-documenting for WHAT
+- **Examples First**: Start documentation with practical examples before diving into detailed explanations
+- **Troubleshooting Section**: Include common issues and their solutions; save time for both users and maintainers
+- **Environment Setup**: Document all environment variables, configuration options, and their default values
+- **Development Guide**: Provide setup instructions for development environment; include how to run tests, linter, formatter
+- **Contributing Guide**: Create CONTRIBUTING.md with guidelines for pull requests, code style, testing requirements, review process
+- **Inline Documentation**: Use inline documentation for complex algorithms or non-obvious code sections
+- **Visual Aids**: Include diagrams, screenshots, or architecture diagrams where they add clarity (mermaid, PlantUML)
+- **Version Compatibility**: Document which versions of dependencies, platforms, or runtimes are supported
+- **Migration Guides**: Provide migration guides when making breaking changes between major versions
+- **Link to Resources**: Link to relevant external resources, RFCs, or documentation for deeper understanding
+- **Search and Discovery**: Organize documentation so information is easy to find; use clear headings and table of contents
+- **Onboarding Documentation**: Create onboarding docs for new team members; include architecture overview and development workflow
+- **Accessibility**: Ensure documentation is accessible (proper headings, alt text for images, clear language)
+- **Avoid Duplication**: Keep documentation in one authoritative place; link to it rather than duplicating across locations

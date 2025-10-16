@@ -1,0 +1,27 @@
+## Advanced observability: SLO, SLI, and error budgets
+
+- **Service Level Indicators (SLIs)**: Define measurable metrics for service health (availability, latency, throughput, error rate)
+- **Service Level Objectives (SLOs)**: Set targets for SLIs (e.g., 99.9% availability, p95 latency < 500ms)
+- **Service Level Agreements (SLAs)**: For customer-facing services, define SLAs with financial consequences; SLA < SLO to allow buffer
+- **SLI Selection**: Choose SLIs that matter to users; common SLIs: availability (uptime), latency (response time), throughput (requests/sec), error rate
+- **Measurement Windows**: Define measurement windows (rolling 28 days common); shorter windows for faster feedback
+- **Error Budget**: Calculate error budget from SLO (99.9% uptime = 43 minutes downtime per month); track budget consumption
+- **Error Budget Policy**: Define what happens when error budget exhausted (freeze launches, focus on reliability, increase on-call)
+- **Burn Rate**: Monitor error budget burn rate; alert on fast burn (consuming budget too quickly)
+- **Alerting Strategy**: Alert on SLO violations and fast burn rates, not individual events; reduce alert fatigue
+- **Multi-Window Alerting**: Use multiple time windows (1h, 6h, 3d) to detect both fast and slow burns
+- **Golden Signals**: Monitor four golden signals: latency, traffic, errors, saturation (USE method for resources)
+- **Distributed Tracing**: Implement distributed tracing (OpenTelemetry, Jaeger, Zipkin) to track requests across services
+- **Trace Context Propagation**: Propagate trace context (trace ID, span ID) across service boundaries and async operations
+- **Trace Sampling**: Use intelligent sampling to balance cost and visibility; sample all errors and slow requests
+- **Structured Logging**: Use structured logging (JSON) with consistent fields (timestamp, trace_id, user_id, severity, message)
+- **Log Correlation**: Correlate logs with traces using trace_id; link logs to specific requests for debugging
+- **Metrics Cardinality**: Limit metric cardinality; avoid unbounded labels (user_id, email); use histogram for latency, not gauge
+- **Custom Metrics**: Emit custom business metrics (orders/minute, revenue/hour, active users); track alongside technical metrics
+- **Dashboards**: Build SLO dashboards showing current performance vs target, error budget remaining, burn rate
+- **Runbooks**: Link alerts to runbooks; provide context and remediation steps; update runbooks after incidents
+- **Incident Response**: Define incident severity levels; establish escalation paths; use incident management tool (PagerDuty, Opsgenie)
+- **Blameless Postmortems**: Conduct blameless postmortems after incidents; focus on systems not individuals; share learnings
+- **Chaos Engineering**: Practice chaos engineering to validate SLOs; test failure scenarios in production safely
+- **Capacity Planning**: Use metrics for capacity planning; project resource needs based on growth trends
+- **Cost vs Reliability**: Balance reliability investment with business value; not everything needs 99.99% uptime
